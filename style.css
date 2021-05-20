@@ -1,0 +1,21 @@
+body {
+    background-color: #1a202b;
+}
+
+.text-container{
+    color: #eeeeee;
+    width: 96vw;
+    font-size: 3.2em;
+    margin-left: 2vw;
+    margin-bottom: 2vh;
+    height: 45vh;
+    font-family: "MS Gothic";
+    line-height: 1.1em;
+    overflow: auto;
+    display: flex;
+    align-content: center;
+}
+
+.content {
+    margin :auto 0;
+}
