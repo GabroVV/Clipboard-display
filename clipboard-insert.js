@@ -5,11 +5,13 @@ const observer = new MutationObserver(function DOMMutationHandler(mutationList, 
    for(const mutation of mutationList){
        let nodes = mutation.addedNodes;
        for(let node of nodes) {
-         if(node.tagName === "P") // Find <p> tag added by addon
+         if(node.tagName === "P"){ // Find <p> tag added by addon
+           console.log("Why");
            prevLineDiv.innerText = newLineDiv.innerText;
            newLineDiv.innerText = node.innerText;
            node.remove(); // Remove <p> tag added by addon
            break;
+        }
        };
        
    }
@@ -18,7 +20,7 @@ const observer = new MutationObserver(function DOMMutationHandler(mutationList, 
 
 // Only observe childList mutations
 const config = { attributes: false, childList: true, subtree: false };
-const observerTargetNode = document.body
-observer.observe(observerTargetNode, config)
+const observerTargetNode = document.body;
+observer.observe(observerTargetNode, config);
 
 
