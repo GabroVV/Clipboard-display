@@ -3,12 +3,11 @@ body {
 }
 
 .text-container{
+    top: 0px;
     color: #eeeeee;
-    width: 96vw;
+    width: 100vw;
+    height: 90vh;
     font-size: 3.2em;
-    margin-left: 2vw;
-    margin-bottom: 2vh;
-    height: 45vh;
     font-family: "MS Gothic";
     line-height: 1.1em;
     overflow: auto;
@@ -16,8 +15,24 @@ body {
     align-content: center;
 }
 
+#main{
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    width: 300vw;
+    left: -100vw;
+}
+#next-container{
+    order: 2;
+}
+
+#current-container{
+    order: 1;
+}
+
 .content {
     margin :auto 0;
+    padding: 5vw;
 }
 
 

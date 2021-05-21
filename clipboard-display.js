@@ -1,14 +1,25 @@
 //---------------Document element constants---------------
-const newLineDiv = document.getElementById("new-line");
+const currentLineDiv = document.getElementById("current-line");
 const prevLineDiv = document.getElementById("prev-line");
-
+const nextLineDiv = document.getElementById("next-line");
 const fontSilder = document.getElementById("font-size-input");
 const fontTextInput = document.getElementById("font-size-text-input");
 const fontColorPicker = document.getElementById("font-color-picker");
 const bgColorPicker = document.getElementById("bg-color-picker")
 const text = document.getElementsByClassName("text-container");
 let isSidebarShown = false;
+let clipData = [];
 let localStorage = window.localStorage;
+let currentClipboardIndex = 0;
+let currentPage = currentLineDiv;
+//--------------Div ordering----------------------
+currentLineDiv.next = nextLineDiv;
+prevLineDiv.next = currentLineDiv;
+nextLineDiv.next = prevLineDiv;
+
+currentLineDiv.prev = prevLineDiv;
+prevLineDiv.prev = nextLineDiv;
+nextLineDiv.prev = currentLineDiv;
 //---------------Attempt to load config from local storage---------------
 function loadLocalStorageConfig(){
    var fontSize = localStorage.getItem('font-size');
@@ -37,23 +48,49 @@ function loadLocalStorageConfig(){
 
 loadLocalStorageConfig();
 
+//---------------Attempt to load previous data from local storage---------------
+var clipDataRaw = localStorage.getItem('clip-data');
+if(clipDataRaw !== null){
+   clipData = JSON.parse(clipDataRaw);
+}
 //---------------Clipboard addon handling---------------
+
 const observer = new MutationObserver(function DOMMutationHandler(mutationList, observer) {
    for(const mutation of mutationList){
        let nodes = mutation.addedNodes;
        for(let node of nodes) {
          if(node.tagName === "P"){ // Find <p> tag added by addon
-           console.log("Why");
-           prevLineDiv.innerText = newLineDiv.innerText;
-           newLineDiv.innerText = node.innerText;
+           clipData.push(node.innerText); 
+           console.log("uhh");
+           localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
            node.remove(); // Remove <p> tag added by addon
+           currentPage = currentPage.next;  
+           currentPage.innerText = node.innerText;
+           moveToFront();
            break;
         }
        };
-       
    }
 }
 )
+
+function moveForward(){
+
+}
+
+function moveBackwards(){
+
+}
+
+function moveToFront(){
+   console.log("test");
+   currentPage.parentNode.style.order = 1;
+   currentPage.prev.parentNode.style.order = 0;
+   currentPage.next.parentNode.style.order = 2;
+
+   console.log(currentPage);
+   currentClipboardIndex = clipData.length - 1;
+}
 
 // Only observe childList mutations
 const config = { attributes: false, childList: true, subtree: false };
