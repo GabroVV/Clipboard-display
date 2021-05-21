@@ -1,8 +1,43 @@
-//---------------Clipboard addon handling---------------
-
+//---------------Document element constants---------------
 const newLineDiv = document.getElementById("new-line");
 const prevLineDiv = document.getElementById("prev-line");
 
+const fontSilder = document.getElementById("font-size-input");
+const fontTextInput = document.getElementById("font-size-text-input");
+const fontColorPicker = document.getElementById("font-color-picker");
+const bgColorPicker = document.getElementById("bg-color-picker")
+const text = document.getElementsByClassName("text-container");
+let isSidebarShown = false;
+let localStorage = window.localStorage;
+//---------------Attempt to load config from local storage---------------
+function loadLocalStorageConfig(){
+   var fontSize = localStorage.getItem('font-size');
+   var bgHex = localStorage.getItem('bg-hex');
+   var fontHex = localStorage.getItem('font-hex');
+   if(fontSize !== null){
+      for (block of text){
+         block.style.fontSize = fontSize; //change font size to localstorage value in em
+      }
+      fontSizeNumber = fontSize.substring(0,fontSize.indexOf("em"));
+      fontTextInput.value = fontSizeNumber; //change font size inputs to new value
+      fontSilder.value = fontSizeNumber; 
+   }
+
+   if(bgHex !== null){
+      document.body.style.backgroundColor = bgHex; //change background color to hex value from localstorage
+      bgColorPicker.value = bgHex;  //change color picker display to new value
+   }
+   if(fontHex !== null){
+      for (block of text){
+         block.style.color = fontHex; //change font color to hex value from localstorage
+      }
+      fontColorPicker.value = fontHex; //change color picker display to new value
+   }
+}
+
+loadLocalStorageConfig();
+
+//---------------Clipboard addon handling---------------
 const observer = new MutationObserver(function DOMMutationHandler(mutationList, observer) {
    for(const mutation of mutationList){
        let nodes = mutation.addedNodes;
@@ -26,7 +61,6 @@ const observerTargetNode = document.body;
 observer.observe(observerTargetNode, config);
 
 //---------------Sidebar---------------
-let isSidebarShown = false;
 function sidebarToggle() {
    if(isSidebarShown){
       closeSidebar();
@@ -49,11 +83,6 @@ function closeSidebar() {
    document.getElementById("main").style.marginRight = "0";
 } 
  //---------------Font Slider---------------
-
- const fontSilder = document.getElementById("font-size-input");
- const fontTextInput = document.getElementById("font-size-text-input");
- const text = document.getElementsByClassName("text-container");
-
  fontSilder.oninput = function() {
     console.log("ekee")
     var fontSize = this.value;
@@ -61,24 +90,31 @@ function closeSidebar() {
        fontTextInput.value = this.value;
        block.style.fontSize = fontSize.concat("em"); //change font size to slider value in em unit
     }
+    localStorage.setItem('font-size',fontSize.concat("em"))
  }
 
  function fontSizeTextInput() {
     var fontSize = fontTextInput.value;
-    console.log(fontSize);
     fontSilder.value = fontSize
     for (block of text){
       block.style.fontSize = fontSize.concat("em"); //change font size to slider value in em unit
-   }
+      }
+    localStorage.setItem('font-size',fontSize.concat("em"))
  }
 
  //---------------Font Color---------------
 function fontColorChange(color) {
+   var fontHex = color.toHEXString();
     for (block of text){
-       block.style.color = color.toHEXString(); //change font color to hex value from picker
+       block.style.color = fontHex; //change font color to hex value from picker
     }
+    localStorage.setItem("font-hex", fontHex);
+
 }
   //---------------Background Color---------------
 function backgroundColorChange(color) {
-   document.body.style.backgroundColor = color.toHEXString(); //change background color to hex value from picker
+   var bgHex = color.toHEXString();
+   document.body.style.backgroundColor = bgHex; //change background color to hex value from picker
+   localStorage.setItem("bg-hex", bgHex);
 }
+
