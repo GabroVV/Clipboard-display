@@ -10,17 +10,21 @@
   <div id="sidebar">
     <div id="options-header">OPTIONS</div>
     <div class="option-block">
-      <div>Font size:</div>
-      <input type="range" step="0.1" min="0.5" max="10" value="3.2" class="slider" id="font-size-input">
+      <div class="option-name">Background color:</div>
+      <input onInput="backgroundColorChange(this.jscolor)" value="#1a202b" data-jscolor="" id="bg-color-picker" class="color-picker">
     </div>
     <div class="option-block">
-      <div>Font Color:</div>
+      <div class="option-name">Font Color:</div>
       <input onInput="fontColorChange(this.jscolor)" value="#eeeeee" data-jscolor="" id="font-color-picker" class="color-picker">
     </div>
     <div class="option-block">
-      <div>Background color:</div>
-      <input onInput="backgroundColorChange(this.jscolor)" value="#1a202b" data-jscolor="" id="bg-color-picker" class="color-picker">
+      <div class="option-name">Font size (em):
+        <input type="number" id="font-size-text-input" step="0.1" value="3.2" onchange="fontSizeTextInput()" size=4>
+      </div>
+      <input type="range" step="0.1" min="0.5" max="10" value="3.2" class="slider" id="font-size-input">
     </div>
+
+
 
   </div>
   <main id="main">

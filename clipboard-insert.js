@@ -39,30 +39,41 @@ function sidebarToggle() {
 
 function openSidebar() {
    document.getElementById("sidebar").style.opacity = "1";
-   document.getElementById("sidebar").style.width = "300px";
+   document.getElementById("sidebar").style.right = "0px";
    document.getElementById("main").style.marginRight = "300px";
 }
  
 function closeSidebar() {
    document.getElementById("sidebar").style.opacity = "0";
-   document.getElementById("sidebar").style.width = "0";
+   document.getElementById("sidebar").style.right = "-300px";
    document.getElementById("main").style.marginRight = "0";
 } 
  //---------------Font Slider---------------
 
  const fontSilder = document.getElementById("font-size-input");
+ const fontTextInput = document.getElementById("font-size-text-input");
+ const text = document.getElementsByClassName("text-container");
 
  fontSilder.oninput = function() {
+    console.log("ekee")
     var fontSize = this.value;
-    var text = document.getElementsByClassName("text-container");
     for (block of text){
+       fontTextInput.value = this.value;
        block.style.fontSize = fontSize.concat("em"); //change font size to slider value in em unit
     }
  }
 
+ function fontSizeTextInput() {
+    var fontSize = fontTextInput.value;
+    console.log(fontSize);
+    fontSilder.value = fontSize
+    for (block of text){
+      block.style.fontSize = fontSize.concat("em"); //change font size to slider value in em unit
+   }
+ }
+
  //---------------Font Color---------------
 function fontColorChange(color) {
-   var text = document.getElementsByClassName("text-container");
     for (block of text){
        block.style.color = color.toHEXString(); //change font color to hex value from picker
     }
