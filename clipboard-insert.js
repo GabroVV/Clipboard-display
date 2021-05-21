@@ -36,14 +36,38 @@ function sidebarToggle() {
    }
    isSidebarShown = !isSidebarShown;
 }
-/* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+
 function openSidebar() {
-   document.getElementById("sidebar").style.width = "250px";
-   document.getElementById("main").style.marginRight = "250px";
- }
+   document.getElementById("sidebar").style.opacity = "1";
+   document.getElementById("sidebar").style.width = "300px";
+   document.getElementById("main").style.marginRight = "300px";
+}
  
- /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
- function closeSidebar() {
+function closeSidebar() {
+   document.getElementById("sidebar").style.opacity = "0";
    document.getElementById("sidebar").style.width = "0";
    document.getElementById("main").style.marginRight = "0";
- } 
+} 
+ //---------------Font Slider---------------
+
+ const fontSilder = document.getElementById("font-size-input");
+
+ fontSilder.oninput = function() {
+    var fontSize = this.value;
+    var text = document.getElementsByClassName("text-container");
+    for (block of text){
+       block.style.fontSize = fontSize.concat("em"); //change font size to slider value in em unit
+    }
+ }
+
+ //---------------Font Color---------------
+function fontColorChange(color) {
+   var text = document.getElementsByClassName("text-container");
+    for (block of text){
+       block.style.color = color.toHEXString(); //change font color to hex value from picker
+    }
+}
+  //---------------Background Color---------------
+function backgroundColorChange(color) {
+   document.body.style.backgroundColor = color.toHEXString(); //change background color to hex value from picker
+}
