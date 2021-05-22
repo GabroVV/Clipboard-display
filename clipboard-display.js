@@ -2,11 +2,18 @@
 const currentLineDiv = document.getElementById("current-line");
 const prevLineDiv = document.getElementById("prev-line");
 const nextLineDiv = document.getElementById("next-line");
+const text = document.getElementsByClassName("text-container");
+//Sidebar
 const fontSilder = document.getElementById("font-size-input");
 const fontTextInput = document.getElementById("font-size-text-input");
 const fontColorPicker = document.getElementById("font-color-picker");
 const bgColorPicker = document.getElementById("bg-color-picker")
-const text = document.getElementsByClassName("text-container");
+//Navbar
+const backButton = document.getElementById("b-button");
+const doubleBackButton = document.getElementById("bb-button");
+const forwardButton = document.getElementById("f-button");
+const doubleForwardButton = document.getElementById("ff-button");
+
 let isSidebarShown = false;
 let clipData = [];
 let localStorage = window.localStorage;
@@ -96,6 +103,7 @@ function moveToRear(){
 function moveToIndex(index){
    currentPage = currentPage.next;
    currentPageIndex.index = index;  
+   blockNavbarButtons();
    currentPage.innerText = clipData[index];
    currentPage.parentNode.style.left = "0";
    currentPage.prev.parentNode.style.left = "-100vw";
@@ -106,6 +114,27 @@ function moveToIndex(index){
 }
 function moveToFront(){
    moveToIndex(clipData.length - 1);
+}
+
+function blockNavbarButtons(){
+   var index =  currentPageIndex.index; 
+   if(index !== 0 && index !== clipData.length - 1){
+      doubleBackButton.disabled = false;
+      backButton.disabled = false;
+      forwardButton.disabled = false;
+      doubleForwardButton.disabled = false;
+   }
+   else if (index == 0){
+      doubleBackButton.disabled = true;
+      backButton.disabled = true;
+      forwardButton.disabled = false;
+      doubleForwardButton.disabled = false;
+   }else{
+      doubleBackButton.disabled = false;
+      backButton.disabled = false;
+      forwardButton.disabled = true;
+      doubleForwardButton.disabled = true;
+   }
 }
 
 
