@@ -10,7 +10,17 @@ const text = document.getElementsByClassName("text-container");
 let isSidebarShown = false;
 let clipData = [];
 let localStorage = window.localStorage;
-let currentClipboardIndex = 0;
+let currentPageIndex = {
+   indexInternal:0,
+   set index(val) {
+      this.indexInternal = val;
+      console.log("Someone changed the value of index to " + val)
+    },
+    get index() {
+      return this.indexInternal;
+    },
+};
+
 let currentPage = currentLineDiv;
 //--------------Div ordering----------------------
 currentLineDiv.next = nextLineDiv;
@@ -52,6 +62,7 @@ loadLocalStorageConfig();
 var clipDataRaw = localStorage.getItem('clip-data');
 if(clipDataRaw !== null){
    clipData = JSON.parse(clipDataRaw);
+   console.log(clipData);
 }
 //---------------Clipboard addon handling---------------
 
@@ -63,8 +74,6 @@ const observer = new MutationObserver(function DOMMutationHandler(mutationList, 
            clipData.push(node.innerText); 
            localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
            node.remove(); // Remove <p> tag added by addon
-           currentPage = currentPage.next;  
-           currentPage.innerText = node.innerText;
            moveToFront();
            break;
         }
@@ -74,23 +83,29 @@ const observer = new MutationObserver(function DOMMutationHandler(mutationList, 
 )
 
 function moveForward(){
-
+   moveToIndex(currentPageIndex.index + 1);
 }
 
 function moveBackwards(){
-
+   moveToIndex(currentPageIndex.index - 1);
 }
 
-function moveToFront(){
-   console.log(currentPage);
+function moveToRear(){
+   moveToIndex(0);
+}
+function moveToIndex(index){
+   currentPage = currentPage.next;
+   currentPageIndex.index = index;  
+   currentPage.innerText = clipData[index];
    currentPage.parentNode.style.left = "0";
-  
    currentPage.prev.parentNode.style.left = "-100vw";
    currentPage.next.parentNode.classList.add("instant-transitions");
    currentPage.next.parentNode.style.left = "100vw";
    currentPage.next.parentNode.offsetHeight;
    currentPage.next.parentNode.classList.remove("instant-transitions");
-   currentClipboardIndex = clipData.length - 1;
+}
+function moveToFront(){
+   moveToIndex(clipData.length - 1);
 }
 
 
@@ -113,13 +128,13 @@ function sidebarToggle() {
 function openSidebar() {
    document.getElementById("sidebar").style.opacity = "1";
    document.getElementById("sidebar").style.right = "0px";
-   document.getElementById("main").style.marginRight = "300px";
+   document.getElementsByTagName("main")[0].style.marginRight = "300px";
 }
  
 function closeSidebar() {
    document.getElementById("sidebar").style.opacity = "0";
    document.getElementById("sidebar").style.right = "-300px";
-   document.getElementById("main").style.marginRight = "0";
+   document.getElementsByTagName("main")[0].style.marginRight = "0";
 } 
  //---------------Font Slider---------------
  fontSilder.oninput = function() {
