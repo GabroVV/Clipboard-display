@@ -61,7 +61,6 @@ const observer = new MutationObserver(function DOMMutationHandler(mutationList, 
        for(let node of nodes) {
          if(node.tagName === "P"){ // Find <p> tag added by addon
            clipData.push(node.innerText); 
-           console.log("uhh");
            localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
            node.remove(); // Remove <p> tag added by addon
            currentPage = currentPage.next;  
@@ -83,14 +82,17 @@ function moveBackwards(){
 }
 
 function moveToFront(){
-   console.log("test");
-   currentPage.parentNode.style.order = 1;
-   currentPage.prev.parentNode.style.order = 0;
-   currentPage.next.parentNode.style.order = 2;
-
    console.log(currentPage);
+   currentPage.parentNode.style.left = "0";
+  
+   currentPage.prev.parentNode.style.left = "-100vw";
+   currentPage.next.parentNode.classList.add("instant-transitions");
+   currentPage.next.parentNode.style.left = "100vw";
+   currentPage.next.parentNode.offsetHeight;
+   currentPage.next.parentNode.classList.remove("instant-transitions");
    currentClipboardIndex = clipData.length - 1;
 }
+
 
 // Only observe childList mutations
 const config = { attributes: false, childList: true, subtree: false };
@@ -121,7 +123,6 @@ function closeSidebar() {
 } 
  //---------------Font Slider---------------
  fontSilder.oninput = function() {
-    console.log("ekee")
     var fontSize = this.value;
     for (block of text){
        fontTextInput.value = this.value;

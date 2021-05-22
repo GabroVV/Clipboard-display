@@ -4,6 +4,7 @@ body {
 
 .text-container{
     top: 0px;
+    position: absolute;
     color: #eeeeee;
     width: 100vw;
     height: 90vh;
@@ -13,21 +14,25 @@ body {
     overflow: auto;
     display: flex;
     align-content: center;
+    transition: left 1s;
 }
 
 #main{
     position: fixed;
-    display: flex;
-    flex-direction: row;
     width: 300vw;
-    left: -100vw;
+    left: 0vw;
 }
 #next-container{
-    order: 2;
+    left: 100vw;
 }
 
 #current-container{
-    order: 1;
+    left: 0;
+
+}
+
+#prev-container{
+    left: -100vw;
 }
 
 .content {
@@ -154,4 +159,8 @@ body {
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+.instant-transitions {
+    transition: 0s !important;
 }
