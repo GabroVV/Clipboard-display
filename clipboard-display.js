@@ -100,17 +100,32 @@ function moveBackwards(){
 function moveToRear(){
    moveToIndex(0);
 }
-function moveToIndex(index){
-   currentPage = currentPage.next;
-   currentPageIndex.index = index;  
+function moveToIndex(newIndex){
+   var oldIndex = currentPageIndex.index
+   currentPageIndex.index = newIndex;  
    blockNavbarButtons();
-   currentPage.innerText = clipData[index];
-   currentPage.parentNode.style.left = "0";
-   currentPage.prev.parentNode.style.left = "-100vw";
-   currentPage.next.parentNode.classList.add("instant-transitions");
-   currentPage.next.parentNode.style.left = "100vw";
-   currentPage.next.parentNode.offsetHeight;
-   currentPage.next.parentNode.classList.remove("instant-transitions");
+   if(oldIndex < newIndex)
+   {
+      currentPage = currentPage.next;
+      currentPage.innerText = clipData[newIndex];
+      currentPage.parentNode.style.left = "0";
+      currentPage.prev.parentNode.style.left = "-100vw";
+      currentPage.next.parentNode.classList.add("instant-transitions");
+      currentPage.next.parentNode.style.left = "100vw";
+      currentPage.next.parentNode.offsetHeight;
+      currentPage.next.parentNode.classList.remove("instant-transitions");
+   }
+   else{
+      currentPage = currentPage.prev;
+      currentPage.innerText = clipData[newIndex];
+      currentPage.parentNode.style.left = "0";
+      currentPage.next.parentNode.style.left = "100vw";
+      currentPage.prev.parentNode.classList.add("instant-transitions");
+      currentPage.prev.parentNode.style.left = "-100vw";
+      currentPage.prev.parentNode.offsetHeight;
+      currentPage.prev.parentNode.classList.remove("instant-transitions");
+   }
+
 }
 function moveToFront(){
    moveToIndex(clipData.length - 1);
