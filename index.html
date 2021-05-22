@@ -27,20 +27,20 @@
 
   <main>
     <div class = "text-container" id="prev-container">
-      <div class = "content" id="prev-line">Poprzedni</div>
+      <div class = "content" id="prev-line"></div>
     </div>
     <div class = "text-container" id="current-container">
-      <div class = "content" id="current-line">Teraz</div>
+      <div class = "content" id="current-line"></div>
     </div>
     <div class = "text-container" id="next-container">
-      <div class = "content" id="next-line">Nastepny</div>
+      <div class = "content" id="next-line"></div>
     </div>
   </main>
   <footer>
     <div id="nav-bar">
       <button id="bb-button" class="bi bi-chevron-double-left my-button"  onclick="moveToRear()"></button>
       <button id="b-button" class="bi bi-chevron-left my-button"  onclick="moveBackwards()"></button>
-      <input type="number" id="page-text-input" step="1" value="0" oninput="" size="4">
+      <button id="page-count-button" class="my-button" id="page-text-input"  oninput=""></button>
       <button id="f-button" class="bi bi-chevron-right my-button"  onclick="moveForward()"></button>
       <button id="ff-button"class="bi bi-chevron-double-right my-button"  onclick="moveToFront()"></button>
     </div>

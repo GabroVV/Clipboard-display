@@ -14,7 +14,7 @@ body {
     overflow: auto;
     display: flex;
     align-content: center;
-    transition: left 1s;
+    transition: left 1s cubic-bezier(.2,.35,.41,1.44);
 }
 
 main{
@@ -77,8 +77,19 @@ main{
   text-align: center;
   text-decoration: none;
   border-radius: 4px;
-
 }
+
+
+#nav-bar .my-button{
+  padding: 0 10px;
+  margin: 0 10px; 
+}
+
+#nav-bar #page-count-button{
+  padding: 0 20px;
+  min-width: 150px;
+}
+
 
 .my-button:hover:enabled {
   border-radius: 25px;

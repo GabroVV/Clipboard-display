@@ -11,6 +11,7 @@ const bgColorPicker = document.getElementById("bg-color-picker")
 //Navbar
 const backButton = document.getElementById("b-button");
 const doubleBackButton = document.getElementById("bb-button");
+const pageCounter = document.getElementById("page-count-button");
 const forwardButton = document.getElementById("f-button");
 const doubleForwardButton = document.getElementById("ff-button");
 
@@ -21,7 +22,6 @@ let currentPageIndex = {
    indexInternal:0,
    set index(val) {
       this.indexInternal = val;
-      console.log("Someone changed the value of index to " + val)
     },
     get index() {
       return this.indexInternal;
@@ -69,7 +69,8 @@ loadLocalStorageConfig();
 var clipDataRaw = localStorage.getItem('clip-data');
 if(clipDataRaw !== null){
    clipData = JSON.parse(clipDataRaw);
-   console.log(clipData);
+   moveToFront();
+
 }
 //---------------Clipboard addon handling---------------
 
@@ -102,7 +103,8 @@ function moveToRear(){
 }
 function moveToIndex(newIndex){
    var oldIndex = currentPageIndex.index
-   currentPageIndex.index = newIndex;  
+   currentPageIndex.index = newIndex;
+   updatePageCounter();  
    blockNavbarButtons();
    if(oldIndex < newIndex)
    {
@@ -127,6 +129,12 @@ function moveToIndex(newIndex){
    }
 
 }
+
+function updatePageCounter(){
+   var string = "";
+   pageCounter.textContent = string.concat(currentPageIndex.index + 1,"/",clipData.length);
+}
+
 function moveToFront(){
    moveToIndex(clipData.length - 1);
 }
@@ -214,4 +222,3 @@ function backgroundColorChange(color) {
    document.body.style.backgroundColor = bgHex; //change background color to hex value from picker
    localStorage.setItem("bg-hex", bgHex);
 }
-
