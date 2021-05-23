@@ -14,7 +14,10 @@ const doubleBackButton = document.getElementById("bb-button");
 const pageCounter = document.getElementById("page-count-button");
 const forwardButton = document.getElementById("f-button");
 const doubleForwardButton = document.getElementById("ff-button");
+//Page list
+const pageList = document.getElementById("page-list");
 
+let isPageListShown = false;
 let isSidebarShown = false;
 let clipData = [];
 let localStorage = window.localStorage;
@@ -221,4 +224,28 @@ function backgroundColorChange(color) {
    var bgHex = color.toHEXString();
    document.body.style.backgroundColor = bgHex; //change background color to hex value from picker
    localStorage.setItem("bg-hex", bgHex);
+}
+
+//---------------Page list open/close---------------
+function openPageList(){
+   isPageListShown = true;
+   pageList.style.height = "90vh";
+   pageList.style.left = "15vw";
+   pageList.style.width = "70vw";
+}
+
+function closePageList(){
+   isPageListShown = false;
+   pageList.style.height = "0";
+   pageList.style.left = "50vw";
+   pageList.style.width = "0";
+}
+
+function togglePageList(){
+   if(isPageListShown){
+      closePageList();
+   }
+   else{
+      openPageList();
+   }
 }

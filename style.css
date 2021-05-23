@@ -41,15 +41,6 @@ main{
     padding: 5vw;
 }
 
-#nav-bar {
-  position: fixed;
-  top:90vh;
-  height: 10vh;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
 #sidebar {
   font-family: "MS Gothic";
   opacity: 0;
@@ -102,6 +93,9 @@ main{
 }
 
 footer{
+ 
+  width: 100vw;
+  height: 60px;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -109,6 +103,10 @@ footer{
 }
 
 #nav-bar{
+  position: fixed;
+  height: 80px;
+  bottom: 0;
+  left: 25vw;
   width: 50vw;
   display: flex;
   flex-direction: row;
@@ -126,6 +124,15 @@ footer{
 }
 
 
+#page-list {
+  transition: 1s;
+  position: fixed;
+  width: 0; /* 0vw -> 70vw*/
+  left: 50vw; /*50vw -> 15 vw */
+  height: 0; /* 0vh -> 90vh*/
+  bottom: 60px;
+  background-color: black;
+}
 
 #options-header {
     margin-top: 5px;
