@@ -10,6 +10,7 @@ const fontColorPicker = document.getElementById("font-color-picker");
 const bgColorPicker = document.getElementById("bg-color-picker")
 const animationSpeedSlider = document.getElementById("animation-speed-slider");
 const animationSpeedText = document.getElementById("animation-speed-text");
+const animationType = document.getElementById("animation-type");
 //Navbar
 const backButton = document.getElementById("b-button");
 const doubleBackButton = document.getElementById("bb-button");
@@ -81,6 +82,7 @@ function loadLocalStorageConfig(){
    var fontHex = localStorage.getItem('font-hex');
    var font = localStorage.getItem('font');
    var animationSpeedSaved = localStorage.getItem('animation-speed');
+   var animationTypeSaved = localStorage.getItem('animation-type');
    if(fontSize !== null){
       setFontSize(fontSize);
    }
@@ -97,6 +99,9 @@ function loadLocalStorageConfig(){
    }
    if(animationSpeedSaved !== null){
       setAnimationSpeed(animationSpeedSaved);
+   }
+   if(animationTypeSaved !== null){
+      setAnimationType(animationTypeSaved);
    }
 }
 
@@ -281,6 +286,14 @@ function setAnimationSpeed(value){
      block.style.transitionDuration = value.concat("s");
    }
    localStorage.setItem('animation-speed', value)
+}
+ //---------------Animation Type---------------
+function setAnimationType(value){
+   animationType.value = value;
+   for (block of text){
+      block.style.transitionTimingFunction = value;
+    }
+    localStorage.setItem('animation-type', value)
 }
 
 //---------------Page list open/close---------------

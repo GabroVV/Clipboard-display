@@ -28,11 +28,18 @@
       <input id="font" class="fonts" onchange="fontChange(this.value)">
     </div>
     <div class="option-block">
-      <div class="option-name">Animation speed (s):
-        
-      </div>
+      <div class="option-name">Animation speed (s):</div>
       <input type="number" id="animation-speed-text" step="0.1" value="1" oninput="setAnimationSpeed(this.value)" size=4>
       <input type="range" step="0.1" min="0" max="4" value="1" class="slider" id="animation-speed-slider">
+    </div>
+    <div class="option-block">
+      <div class="option-name">Animation type:</div>
+      <select id="animation-type" oninput="setAnimationType(this.value)">
+        <option value="ease-out">Ease out</option>
+        <option value="linear">Linear</option>
+        <option value="cubic-bezier(.2,.35,.41,1.44)">Bouncy</option>
+      </select>
+
     </div>
   </div>
 

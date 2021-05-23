@@ -160,6 +160,7 @@ footer{
 }
 
 .option-block {
+    transition: 0.5s;
     padding: 20px 0;
     display: flex;
     flex-direction: column;
