@@ -8,6 +8,8 @@ const fontSilder = document.getElementById("font-size-input");
 const fontTextInput = document.getElementById("font-size-text-input");
 const fontColorPicker = document.getElementById("font-color-picker");
 const bgColorPicker = document.getElementById("bg-color-picker")
+const animationSpeedSlider = document.getElementById("animation-speed-slider");
+const animationSpeedText = document.getElementById("animation-speed-text");
 //Navbar
 const backButton = document.getElementById("b-button");
 const doubleBackButton = document.getElementById("bb-button");
@@ -19,6 +21,8 @@ const pageList = document.getElementById("page-list");
 //Variables
 let isPageListShown = false;
 let isSidebarShown = false;
+let animationSpeed = 1;
+
 let clipData = [];
 let localStorage = window.localStorage;
 let currentPageIndex = {
@@ -39,6 +43,26 @@ nextLineDiv.next = prevLineDiv;
 currentLineDiv.prev = prevLineDiv;
 prevLineDiv.prev = nextLineDiv;
 nextLineDiv.prev = currentLineDiv;
+//--------------Loading screen----------------------
+function onReady(callback) {
+   var intervalID = window.setInterval(checkReady, 1000);
+
+   function checkReady() {
+       if (document.getElementsByTagName('body')[0] !== undefined) {
+           window.clearInterval(intervalID);
+           callback.call(this);
+       }
+   }
+}
+
+function hide(id) {
+   document.getElementById(id).style.opacity = 0;
+   document.getElementById(id).style.pointerEvents = "none";
+}
+
+onReady(function () {
+   hide('loading');
+});
 //--------------jQuery for font picker plugin----------------------
 $(document).ready(function() {
    $('input.fonts').fontpicker({
@@ -56,29 +80,23 @@ function loadLocalStorageConfig(){
    var bgHex = localStorage.getItem('bg-hex');
    var fontHex = localStorage.getItem('font-hex');
    var font = localStorage.getItem('font');
+   var animationSpeedSaved = localStorage.getItem('animation-speed');
    if(fontSize !== null){
-      for (block of text){
-         block.style.fontSize = fontSize; //change font size to localstorage value in em
-      }
-      fontSizeNumber = fontSize.substring(0,fontSize.indexOf("em"));
-      fontTextInput.value = fontSizeNumber; //change font size inputs to new value
-      fontSilder.value = fontSizeNumber; 
+      setFontSize(fontSize);
    }
-
    if(bgHex !== null){
-      document.body.style.backgroundColor = bgHex; //change background color to hex value from localstorage
-      bgColorPicker.value = bgHex;  //change color picker display to new value
+      setBackgroundColor(bgHex);
    }
    if(fontHex !== null){
-      for (block of text){
-         block.style.color = fontHex; //change font color to hex value from localstorage
-      }
-      fontColorPicker.value = fontHex; //change color picker display to new value
+      setFontColor(fontHex);
    }
    if(font !== null){
       $('#font').val(font).trigger('change');
    } else {
       $('#font').val("Tahoma:400").trigger('change')
+   }
+   if(animationSpeedSaved !== null){
+      setAnimationSpeed(animationSpeedSaved);
    }
 }
 
@@ -89,7 +107,6 @@ var clipDataRaw = localStorage.getItem('clip-data');
 if(clipDataRaw !== null){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
-
 }
 //---------------Clipboard addon handling---------------
 
@@ -209,21 +226,16 @@ function closeSidebar() {
 } 
  //---------------Font Slider---------------
  fontSilder.oninput = function() {
-    var fontSize = this.value;
-    for (block of text){
-       fontTextInput.value = this.value;
-       block.style.fontSize = fontSize.concat("em"); //change font size to slider value in em unit
-    }
-    localStorage.setItem('font-size',fontSize.concat("em"))
+    setFontSize(this.value);
  }
 
- function fontSizeTextInput() {
-    var fontSize = fontTextInput.value;
-    fontSilder.value = fontSize
-    for (block of text){
-      block.style.fontSize = fontSize.concat("em"); //change font size to slider value in em unit
-      }
-    localStorage.setItem('font-size',fontSize.concat("em"))
+ function setFontSize(value){
+   fontTextInput.value = value;
+   fontSilder.value = value;
+   for (block of text){
+     block.style.fontSize = value.concat("em"); //change font size to slider value in em unit
+     }
+   localStorage.setItem('font-size',value)
  }
 
  //---------------Font change---------------
@@ -242,19 +254,33 @@ function closeSidebar() {
       }
  }
  //---------------Font Color---------------
-function fontColorChange(color) {
-   var fontHex = color.toHEXString();
+function setFontColor(color) {
+   fontColorPicker.value = color;
     for (block of text){
-       block.style.color = fontHex; //change font color to hex value from picker
+       block.style.color = color; //change font color to hex value from picker
     }
-    localStorage.setItem("font-hex", fontHex);
+    localStorage.setItem("font-hex", color);
 
 }
   //---------------Background Color---------------
-function backgroundColorChange(color) {
-   var bgHex = color.toHEXString();
-   document.body.style.backgroundColor = bgHex; //change background color to hex value from picker
-   localStorage.setItem("bg-hex", bgHex);
+function setBackgroundColor(color) {
+   document.body.style.backgroundColor = color; //change background color to hex value from picker
+   bgColorPicker.value = color;
+   localStorage.setItem("bg-hex", color);
+}
+
+ //---------------Animation speed Slider---------------
+ animationSpeedSlider.oninput = function() {
+   setAnimationSpeed(this.value);
+}
+
+function setAnimationSpeed(value){
+   animationSpeedText.value = value;
+   animationSpeedSlider.value = value;
+   for (block of text){
+     block.style.transitionDuration = value.concat("s");
+   }
+   localStorage.setItem('animation-speed', value)
 }
 
 //---------------Page list open/close---------------
