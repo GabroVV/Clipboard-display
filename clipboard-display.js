@@ -55,6 +55,7 @@ function loadLocalStorageConfig(){
    var fontSize = localStorage.getItem('font-size');
    var bgHex = localStorage.getItem('bg-hex');
    var fontHex = localStorage.getItem('font-hex');
+   var font = localStorage.getItem('font');
    if(fontSize !== null){
       for (block of text){
          block.style.fontSize = fontSize; //change font size to localstorage value in em
@@ -73,6 +74,11 @@ function loadLocalStorageConfig(){
          block.style.color = fontHex; //change font color to hex value from localstorage
       }
       fontColorPicker.value = fontHex; //change color picker display to new value
+   }
+   if(font !== null){
+      $('#font').val(font).trigger('change');
+   } else {
+      $('#font').val("Tahoma:400").trigger('change')
    }
 }
 
@@ -222,7 +228,7 @@ function closeSidebar() {
 
  //---------------Font change---------------
  function fontChange(newFont){
-   console.log(newFont);
+   localStorage.setItem("font", newFont);
    var fontProps = newFont.split(':');
    var fontFamily = fontProps[0];
    console.log(fontProps[1]);
