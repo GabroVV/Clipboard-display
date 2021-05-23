@@ -16,7 +16,7 @@ const forwardButton = document.getElementById("f-button");
 const doubleForwardButton = document.getElementById("ff-button");
 //Page list
 const pageList = document.getElementById("page-list");
-
+//Variables
 let isPageListShown = false;
 let isSidebarShown = false;
 let clipData = [];
@@ -30,7 +30,6 @@ let currentPageIndex = {
       return this.indexInternal;
     },
 };
-
 let currentPage = currentLineDiv;
 //--------------Div ordering----------------------
 currentLineDiv.next = nextLineDiv;
@@ -40,6 +39,17 @@ nextLineDiv.next = prevLineDiv;
 currentLineDiv.prev = prevLineDiv;
 prevLineDiv.prev = nextLineDiv;
 nextLineDiv.prev = currentLineDiv;
+//--------------jQuery for font picker plugin----------------------
+$(document).ready(function() {
+   $('input.fonts').fontpicker({
+      lang: 'en',
+      variants: true,
+      lazyLoad: true,
+      showClear: false,
+      nrRecents: 3,
+      googleFonts: true,
+   });
+});
 //---------------Attempt to load config from local storage---------------
 function loadLocalStorageConfig(){
    var fontSize = localStorage.getItem('font-size');
@@ -210,6 +220,21 @@ function closeSidebar() {
     localStorage.setItem('font-size',fontSize.concat("em"))
  }
 
+ //---------------Font change---------------
+ function fontChange(newFont){
+   console.log(newFont);
+   var fontProps = newFont.split(':');
+   var fontFamily = fontProps[0];
+   console.log(fontProps[1]);
+   console.log(fontProps[1].includes("i"));
+   var fontStyle = (fontProps[1].includes("i") ? "italic" : "normal");
+   var fontWeight = parseInt(fontProps[1],10) || '400';
+   for (block of text){
+      block.style.fontStyle = fontStyle;
+      block.style.fontWeight = fontWeight;
+      block.style.fontFamily = fontFamily; 
+      }
+ }
  //---------------Font Color---------------
 function fontColorChange(color) {
    var fontHex = color.toHEXString();
