@@ -18,7 +18,9 @@ const pageCounter = document.getElementById("page-count-button");
 const forwardButton = document.getElementById("f-button");
 const doubleForwardButton = document.getElementById("ff-button");
 //Page list
-const pageList = document.getElementById("page-list-div");
+const pageListDiv = document.getElementById("page-list-div");
+const pageList = document.getElementById("page-list");
+
 //Variables
 let isPageListShown = false;
 let isSidebarShown = false;
@@ -112,6 +114,14 @@ var clipDataRaw = localStorage.getItem('clip-data');
 if(clipDataRaw !== null){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
+}else{
+   createWelcomePage();
+}
+
+function createWelcomePage(){
+   clipData.push({id:0, text:"Siema i siemano"})
+   console.log(clipData);
+   moveToFront();
 }
 //---------------Manage page list elements---------------
 function generatePageList(){
@@ -120,11 +130,18 @@ function generatePageList(){
    }
 }
 
-function addNewListElement(text){
+function addNewListElement(element){
    var listElement = document.createElement("li");
-   listElement.onclick = function() {console.log(this)};
-      listElement.appendChild(document.createTextNode(text));
-      document.getElementById("page-list").prepend(listElement);
+   listElement.jsId = element.id;
+   listElement.onclick = function() {pageListElementChosen(this.jsId)};
+   listElement.appendChild(document.createTextNode(element.text));
+   document.getElementById("page-list").prepend(listElement);
+}
+
+function pageListElementChosen(id){
+   var listElement = clipData.find(element => element.id == id);
+   moveToIndex(clipData.indexOf(listElement));
+   closePageList();
 }
 generatePageList();
 //---------------Clipboard addon handling---------------
@@ -134,17 +151,28 @@ const observer = new MutationObserver(function DOMMutationHandler(mutationList, 
        let nodes = mutation.addedNodes;
        for(let node of nodes) {
          if(node.tagName === "P"){ // Find <p> tag added by addon
-           clipData.push(node.innerText); 
-           addNewListElement(node.innerText);
-           localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
+           handleNewNode(node.innerText);
            node.remove(); // Remove <p> tag added by addon
-           moveToFront();
            break;
         }
        };
    }
 }
 )
+
+function handleNewNode(text){
+   var id;
+   if(clipData.length > 0){
+    id = clipData[clipData.length - 1].id + 1;
+   } else {
+      id = 0;
+   }
+   var clipElement = {id: id ,text: text}
+   clipData.push(clipElement);
+   addNewListElement(clipElement);
+   localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
+   moveToFront();
+}
 
 function moveForward(){
    moveToIndex(currentPageIndex.index + 1);
@@ -169,7 +197,7 @@ function moveToIndex(newIndex){
    if(oldIndex < newIndex)
    {
       currentPage = currentPage.next;
-      currentPage.innerText = clipData[newIndex];
+      currentPage.innerText = clipData[newIndex].text;
       currentPage.parentNode.style.left = "0";
       currentPage.prev.parentNode.style.left = "-100vw";
       currentPage.next.parentNode.classList.add("instant-transitions");
@@ -179,7 +207,7 @@ function moveToIndex(newIndex){
    }
    else{
       currentPage = currentPage.prev;
-      currentPage.innerText = clipData[newIndex];
+      currentPage.innerText = clipData[newIndex].text;
       currentPage.parentNode.style.left = "0";
       currentPage.next.parentNode.style.left = "100vw";
       currentPage.prev.parentNode.classList.add("instant-transitions");
@@ -193,6 +221,7 @@ function moveToIndex(newIndex){
 function updatePageCounter(){
    var string = "";
    pageCounter.textContent = string.concat(currentPageIndex.index + 1,"/",clipData.length);
+   console.log(currentPageIndex.index);
 }
 
 
@@ -205,14 +234,19 @@ function blockNavbarButtons(){
       forwardButton.disabled = false;
       doubleForwardButton.disabled = false;
    }
-   else if (index == 0){
+   else if (index == 0 && clipData.length !== 1){
       doubleBackButton.disabled = true;
       backButton.disabled = true;
       forwardButton.disabled = false;
       doubleForwardButton.disabled = false;
-   }else{
+   }else if(clipData.length > 1){
       doubleBackButton.disabled = false;
       backButton.disabled = false;
+      forwardButton.disabled = true;
+      doubleForwardButton.disabled = true;
+   }else{
+      doubleBackButton.disabled = true;
+      backButton.disabled = true;
       forwardButton.disabled = true;
       doubleForwardButton.disabled = true;
    }
@@ -316,16 +350,16 @@ function setAnimationType(value){
 //---------------Page list open/close---------------
 function openPageList(){
    isPageListShown = true;
-   pageList.style.height = "90vh";
-   pageList.style.left = "15vw";
-   pageList.style.width = "70vw";
+   pageListDiv.style.height = "90vh";
+   pageListDiv.style.left = "15vw";
+   pageListDiv.style.width = "70vw";
 }
 
 function closePageList(){
    isPageListShown = false;
-   pageList.style.height = "0";
-   pageList.style.left = "50vw";
-   pageList.style.width = "0";
+   pageListDiv.style.height = "0";
+   pageListDiv.style.left = "50vw";
+   pageListDiv.style.width = "0";
 }
 
 function togglePageList(){
