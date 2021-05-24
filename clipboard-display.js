@@ -29,7 +29,7 @@ let animationSpeed = 1;
 let clipData = [];
 let localStorage = window.localStorage;
 let currentPageIndex = {
-   indexInternal:0,
+   indexInternal: null,
    set index(val) {
       this.indexInternal = val;
     },

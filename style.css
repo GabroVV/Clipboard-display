@@ -135,6 +135,7 @@ footer{
   height: 0; /* 0vh -> 90vh*/
   bottom: 60px;
   background-color: black;
+  border-radius: 10px;
 }
 
 #page-list{
@@ -161,6 +162,8 @@ footer{
   padding-left: 0.5s;
     border-radius: 5px;
     background-color: rgb(53, 49, 45);
+    color:#54a805;
+    cursor:pointer;
 }
 
 .block-header {
@@ -175,7 +178,7 @@ footer{
 }
 
 #close-page-list-button{
-  padding-right: 5px;
+  padding-right: 10px;
 }
 
 .block-header div{
