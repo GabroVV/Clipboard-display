@@ -18,7 +18,7 @@ const pageCounter = document.getElementById("page-count-button");
 const forwardButton = document.getElementById("f-button");
 const doubleForwardButton = document.getElementById("ff-button");
 //Page list
-const pageList = document.getElementById("page-list");
+const pageList = document.getElementById("page-list-div");
 //Variables
 let isPageListShown = false;
 let isSidebarShown = false;
@@ -113,6 +113,20 @@ if(clipDataRaw !== null){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
 }
+//---------------Manage page list elements---------------
+function generatePageList(){
+   for (const element of clipData) {
+      addNewListElement(element);
+   }
+}
+
+function addNewListElement(text){
+   var listElement = document.createElement("li");
+   listElement.onclick = function() {console.log(this)};
+      listElement.appendChild(document.createTextNode(text));
+      document.getElementById("page-list").prepend(listElement);
+}
+generatePageList();
 //---------------Clipboard addon handling---------------
 
 const observer = new MutationObserver(function DOMMutationHandler(mutationList, observer) {
@@ -121,6 +135,7 @@ const observer = new MutationObserver(function DOMMutationHandler(mutationList, 
        for(let node of nodes) {
          if(node.tagName === "P"){ // Find <p> tag added by addon
            clipData.push(node.innerText); 
+           addNewListElement(node.innerText);
            localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
            node.remove(); // Remove <p> tag added by addon
            moveToFront();
@@ -141,6 +156,10 @@ function moveBackwards(){
 
 function moveToRear(){
    moveToIndex(0);
+}
+
+function moveToFront(){
+   moveToIndex(clipData.length - 1);
 }
 function moveToIndex(newIndex){
    var oldIndex = currentPageIndex.index
@@ -176,9 +195,7 @@ function updatePageCounter(){
    pageCounter.textContent = string.concat(currentPageIndex.index + 1,"/",clipData.length);
 }
 
-function moveToFront(){
-   moveToIndex(clipData.length - 1);
-}
+
 
 function blockNavbarButtons(){
    var index =  currentPageIndex.index; 

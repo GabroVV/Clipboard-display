@@ -126,7 +126,8 @@ footer{
 }
 
 
-#page-list {
+#page-list-div {
+  overflow-y:auto;
   transition: 1s;
   position: fixed;
   width: 0; /* 0vw -> 70vw*/
@@ -134,6 +135,32 @@ footer{
   height: 0; /* 0vh -> 90vh*/
   bottom: 60px;
   background-color: black;
+}
+
+#page-list{
+  color: #eeeeee;
+  list-style-type: decimal;
+  list-style-position: inside;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: nowrap;
+  margin-left: -40px;
+}
+
+#page-list li{
+  transition: 0.5s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  font-size: 1.5em;
+  padding: 10px 0;
+}
+
+#page-list li:hover{
+  transition: 0.5s;
+  padding-left: 0.5s;
+    border-radius: 5px;
+    background-color: rgb(53, 49, 45);
 }
 
 #options-header {
