@@ -8,7 +8,7 @@
 <body>
   <button id="sidebar-button" class="bi bi-gear-fill my-button"  onclick="sidebarToggle()"></button>
   <div id="sidebar">
-    <div id="options-header">OPTIONS</div>
+    <div class="block-header">OPTIONS</div>
     <div class="option-block">
       <div class="option-name">Background color:</div>
       <input onInput="setBackgroundColor(this.jscolor.toHEXString())" value="#1a202b" data-jscolor="" id="bg-color-picker" class="color-picker">
@@ -55,6 +55,11 @@
     </div>
   </main>
     <div id="page-list-div">
+      <div class="block-header">
+        <div></div>
+        <div>CLIPBOARD HISTORY</div>
+        <button id="close-page-list-button" class="bi bi-x-lg my-button"  onclick="togglePageList()"></button>
+      </div>
       <ol id="page-list" reversed>
 
       </ol>

@@ -191,31 +191,32 @@ function moveToFront(){
 }
 function moveToIndex(newIndex){
    var oldIndex = currentPageIndex.index
-   currentPageIndex.index = newIndex;
-   updatePageCounter();  
-   blockNavbarButtons();
-   if(oldIndex < newIndex)
-   {
-      currentPage = currentPage.next;
-      currentPage.innerText = clipData[newIndex].text;
-      currentPage.parentNode.style.left = "0";
-      currentPage.prev.parentNode.style.left = "-100vw";
-      currentPage.next.parentNode.classList.add("instant-transitions");
-      currentPage.next.parentNode.style.left = "100vw";
-      currentPage.next.parentNode.offsetHeight;
-      currentPage.next.parentNode.classList.remove("instant-transitions");
+   if(!(oldIndex === newIndex)){ //avoid moving to same element
+      currentPageIndex.index = newIndex;
+      updatePageCounter();  
+      blockNavbarButtons();
+      if(oldIndex < newIndex)
+      {
+         currentPage = currentPage.next;
+         currentPage.innerText = clipData[newIndex].text;
+         currentPage.parentNode.style.left = "0";
+         currentPage.prev.parentNode.style.left = "-100vw";
+         currentPage.next.parentNode.classList.add("instant-transitions");
+         currentPage.next.parentNode.style.left = "100vw";
+         currentPage.next.parentNode.offsetHeight;
+         currentPage.next.parentNode.classList.remove("instant-transitions");
+      }
+      else{
+         currentPage = currentPage.prev;
+         currentPage.innerText = clipData[newIndex].text;
+         currentPage.parentNode.style.left = "0";
+         currentPage.next.parentNode.style.left = "100vw";
+         currentPage.prev.parentNode.classList.add("instant-transitions");
+         currentPage.prev.parentNode.style.left = "-100vw";
+         currentPage.prev.parentNode.offsetHeight;
+         currentPage.prev.parentNode.classList.remove("instant-transitions");
+      }
    }
-   else{
-      currentPage = currentPage.prev;
-      currentPage.innerText = clipData[newIndex].text;
-      currentPage.parentNode.style.left = "0";
-      currentPage.next.parentNode.style.left = "100vw";
-      currentPage.prev.parentNode.classList.add("instant-transitions");
-      currentPage.prev.parentNode.style.left = "-100vw";
-      currentPage.prev.parentNode.offsetHeight;
-      currentPage.prev.parentNode.classList.remove("instant-transitions");
-   }
-
 }
 
 function updatePageCounter(){
@@ -280,6 +281,12 @@ function closeSidebar() {
    document.getElementById("sidebar").style.right = "-300px";
    document.getElementsByTagName("main")[0].style.marginRight = "0";
 } 
+
+document.addEventListener("click", function(event){
+   if(isSidebarShown && !(event.target.closest("#sidebar, #sidebar-button, .font-picker, .jscolor-picker"))){
+      sidebarToggle();
+   }
+})
  //---------------Font Slider---------------
  fontSilder.oninput = function() {
     setFontSize(this.value);
@@ -307,7 +314,10 @@ function closeSidebar() {
       block.style.fontStyle = fontStyle;
       block.style.fontWeight = fontWeight;
       block.style.fontFamily = fontFamily; 
-      }
+   }
+   pageList.style.fontStyle = fontStyle;
+   pageList.style.fontWeight = fontWeight;
+   pageList.style.fontFamily = fontFamily; 
  }
  //---------------Font Color---------------
 function setFontColor(color) {

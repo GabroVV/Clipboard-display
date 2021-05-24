@@ -16,7 +16,7 @@ body {
     align-content: center;
     transition-property: left;
     transition-duration: 1s; 
-    transition-timing-function: cubic-bezier(.2,.35,.41,1.44); 
+    transition-timing-function: ease-out; 
 }
 
 main{
@@ -153,7 +153,7 @@ footer{
   overflow: hidden;
   text-overflow: ellipsis; 
   font-size: 1.5em;
-  padding: 10px 0;
+  padding: 10px;
 }
 
 #page-list li:hover{
@@ -163,11 +163,23 @@ footer{
     background-color: rgb(53, 49, 45);
 }
 
-#options-header {
-    margin-top: 5px;
-    font-size: 40px;
-    font-family: "'Source Sans Pro', sans-serif";
-    font-weight: bold;
+.block-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #eeeeee;
+  margin-top: 5px;
+  font-size: 40px;
+  font-family: "'Source Sans Pro', sans-serif";
+  font-weight: bold;
+}
+
+#close-page-list-button{
+  padding-right: 5px;
+}
+
+.block-header div{
+  align-self: center;
 }
 
 .slider {
