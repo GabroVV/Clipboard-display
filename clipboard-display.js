@@ -29,7 +29,7 @@ let animationSpeed = 1;
 let clipData = [];
 let localStorage = window.localStorage;
 let currentPageIndex = {
-   indexInternal: null,
+   indexInternal: -1,
    set index(val) {
       this.indexInternal = val;
     },
@@ -47,26 +47,14 @@ currentLineDiv.prev = prevLineDiv;
 prevLineDiv.prev = nextLineDiv;
 nextLineDiv.prev = currentLineDiv;
 //--------------Loading screen----------------------
-function onReady(callback) {
-   var intervalID = window.setInterval(checkReady, 1000);
-
-   function checkReady() {
-       if (document.getElementsByTagName('body')[0] !== undefined) {
-           window.clearInterval(intervalID);
-           callback.call(this);
-       }
+document.onreadystatechange = function () {
+   if (document.readyState === 'complete') {
+      document.getElementById("loading").style.opacity = 0;
+      document.getElementById("loading").style.pointerEvents = "none";
    }
-}
+ }
 
-function hide(id) {
-   document.getElementById(id).style.opacity = 0;
-   document.getElementById(id).style.pointerEvents = "none";
-}
-
-onReady(function () {
-   hide('loading');
-});
-//--------------jQuery for font picker plugin----------------------
+//---------jQuery for font picker plugin----------------------
 $(document).ready(function() {
    $('input.fonts').fontpicker({
       lang: 'en',
@@ -115,14 +103,10 @@ if(clipDataRaw !== null){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
 }else{
-   createWelcomePage();
+   updatePageCounter();
+   updateNavbarButtonsDisabled();
 }
 
-function createWelcomePage(){
-   clipData.push({id:0, text:"Siema i siemano"})
-   console.log(clipData);
-   moveToFront();
-}
 //---------------Manage page list elements---------------
 function generatePageList(){
    for (const element of clipData) {
@@ -145,20 +129,23 @@ function pageListElementChosen(id){
 }
 generatePageList();
 //---------------Clipboard addon handling---------------
-
-const observer = new MutationObserver(function DOMMutationHandler(mutationList, observer) {
-   for(const mutation of mutationList){
-       let nodes = mutation.addedNodes;
-       for(let node of nodes) {
-         if(node.tagName === "P"){ // Find <p> tag added by addon
-           handleNewNode(node.innerText);
-           node.remove(); // Remove <p> tag added by addon
-           break;
-        }
-       };
+   const observer = new MutationObserver(function DOMMutationHandler(mutationList, observer) {
+      for(const mutation of mutationList){
+          let nodes = mutation.addedNodes;
+          for(let node of nodes) {
+            if(node.tagName === "P"){ // Find <p> tag added by addon
+              handleNewNode(node.innerText);
+              node.remove(); // Remove <p> tag added by addon
+              break;
+           }
+          };
+      }
    }
-}
-)
+   )
+   // Only observe childList mutations
+   const config = { attributes: false, childList: true, subtree: false };
+   const observerTargetNode = document.body;
+   observer.observe(observerTargetNode, config);
 
 function handleNewNode(text){
    var id;
@@ -194,7 +181,7 @@ function moveToIndex(newIndex){
    if(!(oldIndex === newIndex)){ //avoid moving to same element
       currentPageIndex.index = newIndex;
       updatePageCounter();  
-      blockNavbarButtons();
+      updateNavbarButtonsDisabled();
       if(oldIndex < newIndex)
       {
          currentPage = currentPage.next;
@@ -222,12 +209,11 @@ function moveToIndex(newIndex){
 function updatePageCounter(){
    var string = "";
    pageCounter.textContent = string.concat(currentPageIndex.index + 1,"/",clipData.length);
-   console.log(currentPageIndex.index);
 }
 
 
 
-function blockNavbarButtons(){
+function updateNavbarButtonsDisabled(){
    var index =  currentPageIndex.index; 
    if(index !== 0 && index !== clipData.length - 1){
       doubleBackButton.disabled = false;
@@ -254,10 +240,7 @@ function blockNavbarButtons(){
 }
 
 
-// Only observe childList mutations
-const config = { attributes: false, childList: true, subtree: false };
-const observerTargetNode = document.body;
-observer.observe(observerTargetNode, config);
+
 
 //---------------Sidebar---------------
 function sidebarToggle() {
