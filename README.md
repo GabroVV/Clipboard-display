@@ -20,6 +20,6 @@ Both clipboard content and customization settings are saved locally in browser's
 1. Add "Clipboard Inserter" extension to your browser: 
     - [Chrome](https://chrome.google.com/webstore/detail/clipboard-inserter/deahejllghicakhplliloeheabddjajm)
     - [Firefox](https://addons.mozilla.org/pl/firefox/addon/clipboard-inserter/)  
-- Extension's options should be left as default: <details><summary>SHOW:</summary><p> ![image](img\inserter_options.png)</p></details>
+- Extension's options should be left as default: <details><summary>SHOW:</summary><p> ![image](img/inserter_options.png)</p></details>
 2. Go to the [website](https://gabrovv.github.io/Clipboard-display/) or [download](https://github.com/GabroVV/Clipboard-display/archive/refs/heads/main.zip) and unpack for local use
-3. Start the extension by clicking on it's icon ![image](img\icon_on.png)
+3. Start the extension by clicking on it's icon ![image](img/icon_on.png)
