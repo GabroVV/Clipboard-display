@@ -19,7 +19,7 @@
     </div>
     <div class="option-block">
       <div class="option-name">Font size (em):
-        <input type="number" id="font-size-text-input" step="0.1" value="3.2" oninput="setFontSize()" size=4>
+        <input type="number" id="font-size-text-input" step="0.1" value="3.2" oninput="setFontSize(this.value)" size=4>
       </div>
       <input type="range" step="0.1" min="0.5" max="20" value="3.2" class="slider" id="font-size-input">
     </div>
@@ -43,16 +43,8 @@
     </div>
   </div>
 
-  <main>
-    <div class = "text-container" id="prev-container">
-      <div class = "content" id="prev-line"></div>
-    </div>
-    <div class = "text-container" id="current-container">
-      <div class = "content" id="current-line"></div>
-    </div>
-    <div class = "text-container" id="next-container">
-      <div class = "content" id="next-line"></div>
-    </div>
+  <main id="main">
+    <div class="new-page"></div>
   </main>
     <div id="page-list-div">
       <div class="block-header">
@@ -64,7 +56,7 @@
     </div>
     <div id="nav-bar">
       <button id="bb-button" class="bi bi-chevron-double-left my-button"  onclick="moveToRear()"></button>
-      <button id="b-button" class="bi bi-chevron-left my-button"  onclick="moveBackwards()"></button>
+      <button id="b-button" class="bi bi-chevron-left my-button"  class="my-button"  onclick="moveBackwards()"></button>
       <button id="page-count-button" class="my-button" id="page-text-input"  onclick="togglePageList()"></button>
       <button id="f-button" class="bi bi-chevron-right my-button"  onclick="moveForward()"></button>
       <button id="ff-button"class="bi bi-chevron-double-right my-button"  onclick="moveToFront()"></button>

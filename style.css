@@ -3,44 +3,36 @@ body {
     background-color: #1a202b;
 }
 
-.text-container{
-    top: 0px;
-    position: absolute;
-    color: #eeeeee;
-    width: 100vw;
-    height: 90vh;
-    font-size: 3.2em;
-    line-height: 1.1em;
-    overflow: auto;
-    display: flex;
-    align-content: center;
-    transition-property: left;
-    transition-duration: 1s; 
-    transition-timing-function: ease-out; 
-}
 
 main{
-    height: 90vh;
-    position: fixed;
-    width: 300vw;
-    left: 0vw;
-}
-#next-container{
-    left: 100vw;
-}
-
-#current-container{
-    left: 0;
-
-}
-
-#prev-container{
-    left: -100vw;
+  top: 0px;
+  overflow: hidden;
+  position: fixed;
+  color: #eeeeee;
+  width: 100vw;
+  height: 90vh;
+  font-size: 3.2em;
+  line-height: 1.1em;
 }
 
 .content {
     margin :auto 0;
     padding: 5vw;
+}
+
+.new-page {
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 90vh;
+}
+
+.new-page .left{
+  left: 100vw;
+}
+
+.new-page .right{
+  left: -100vw;
 }
 
 #sidebar {

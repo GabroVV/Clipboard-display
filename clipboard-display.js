@@ -1,8 +1,7 @@
 //---------------Document element constants---------------
-const currentLineDiv = document.getElementById("current-line");
-const prevLineDiv = document.getElementById("prev-line");
-const nextLineDiv = document.getElementById("next-line");
-const text = document.getElementsByClassName("text-container");
+const DirectionEnum = Object.freeze({"Left":0, "Right":1});
+
+const textContainer = document.getElementById("main");
 //Sidebar
 const fontSilder = document.getElementById("font-size-input");
 const fontTextInput = document.getElementById("font-size-text-input");
@@ -24,9 +23,10 @@ const pageList = document.getElementById("page-list");
 //Variables
 let isPageListShown = false;
 let isSidebarShown = false;
-let animationSpeed = 1;
-
+let animationSpeed = 1000;
+let animationTypeText = "linear";
 let clipData = [];
+let animationStack = [];
 let localStorage = window.localStorage;
 let currentPageIndex = {
    indexInternal: -1,
@@ -37,15 +37,6 @@ let currentPageIndex = {
       return this.indexInternal;
     },
 };
-let currentPage = currentLineDiv;
-//--------------Div ordering----------------------
-currentLineDiv.next = nextLineDiv;
-prevLineDiv.next = currentLineDiv;
-nextLineDiv.next = prevLineDiv;
-
-currentLineDiv.prev = prevLineDiv;
-prevLineDiv.prev = nextLineDiv;
-nextLineDiv.prev = currentLineDiv;
 //--------------Loading screen----------------------
 document.onreadystatechange = function () {
    if (document.readyState === 'complete') {
@@ -182,36 +173,101 @@ function moveToIndex(newIndex){
       currentPageIndex.index = newIndex;
       updatePageCounter();  
       updateNavbarButtonsDisabled();
-      if(oldIndex < newIndex)
-      {
-         currentPage = currentPage.next;
-         currentPage.innerText = clipData[newIndex].text;
-         currentPage.parentNode.style.left = "0";
-         currentPage.prev.parentNode.style.left = "-100vw";
-         currentPage.next.parentNode.classList.add("instant-transitions");
-         currentPage.next.parentNode.style.left = "100vw";
-         currentPage.next.parentNode.offsetHeight;
-         currentPage.next.parentNode.classList.remove("instant-transitions");
+      var direction;
+      if(oldIndex < newIndex){
+         direction = DirectionEnum.Left;
       }
       else{
-         currentPage = currentPage.prev;
-         currentPage.innerText = clipData[newIndex].text;
-         currentPage.parentNode.style.left = "0";
-         currentPage.next.parentNode.style.left = "100vw";
-         currentPage.prev.parentNode.classList.add("instant-transitions");
-         currentPage.prev.parentNode.style.left = "-100vw";
-         currentPage.prev.parentNode.offsetHeight;
-         currentPage.prev.parentNode.classList.remove("instant-transitions");
+         direction = DirectionEnum.Right;
       }
+      createAndMoveTextElement(clipData[newIndex].text, direction);
    }
 }
+
+function finishLeftoverAnimations(){
+   animationStack.forEach(element => {
+      element.finish();
+      animationStack = animationStack.slice(animationStack.indexOf(element), 1);
+   });
+}
+
+//Create new text element on the side
+function createNewTextElement(text, direction){
+   var topDiv = document.createElement("div");
+   var newText = document.createElement("div");
+   newText.innerText = text;
+   newText.classList.add("content");
+   topDiv.classList.add("new-page");
+   if(direction === DirectionEnum.Right){
+      topDiv.classList.add("right");
+   }else{
+      topDiv.classList.add("left");
+   }
+   textContainer.appendChild(topDiv);
+   topDiv.appendChild(newText);
+   return topDiv;
+}
+
+function createAndMoveTextElement(text,direction){
+   finishLeftoverAnimations();
+   var topDiv = createNewTextElement(text,direction);
+   var pages = document.getElementsByClassName("new-page");
+   //Mark text element
+   for (page of pages) {
+      page.current = false;
+   }
+   topDiv.current = true;
+   var from, to, fromPrevious,toPrevious;
+   if(direction === DirectionEnum.Right){
+      from = "-100vw";
+      to = "0";
+      fromPrevious = "0";
+      toPrevious = "100vw";
+    }
+   if(direction === DirectionEnum.Left){
+      from = "100vw";
+      to = "0";
+      fromPrevious = "0";
+      toPrevious = "-100vw";
+   }
+   // New text animation
+   var animation = topDiv.animate([
+   {
+      left:from
+   },
+   { 
+      left:to      }
+   ], {duration: animationSpeed, easing: animationTypeText});
+   animationStack.push(animation);
+   // Destroy other text elements on animation finish
+   animation.onfinish = function() {
+      var pages = document.getElementsByClassName("new-page");
+      for (page of pages) {
+         if(!page.current){
+            page.remove();
+         }
+      }
+   }
+    // All other leftover text animation
+    for(page of pages){
+       if(!page.current){
+         var animationPrevious = page.animate([
+            {
+              left:fromPrevious
+            },
+            {
+              left:toPrevious      }
+          ], {duration: animationSpeed, easing: animationTypeText});
+          animationStack.push(animationPrevious);
+       }
+    };
+}
+
 
 function updatePageCounter(){
    var string = "";
    pageCounter.textContent = string.concat(currentPageIndex.index + 1,"/",clipData.length);
 }
-
-
 
 function updateNavbarButtonsDisabled(){
    var index =  currentPageIndex.index; 
@@ -265,6 +321,7 @@ function closeSidebar() {
    document.getElementsByTagName("main")[0].style.marginRight = "0";
 } 
 
+//Close sidebar on outside click
 document.addEventListener("click", function(event){
    if(isSidebarShown && !(event.target.closest("#sidebar, #sidebar-button, .font-picker, .jscolor-picker"))){
       sidebarToggle();
@@ -278,9 +335,7 @@ document.addEventListener("click", function(event){
  function setFontSize(value){
    fontTextInput.value = value;
    fontSilder.value = value;
-   for (block of text){
-     block.style.fontSize = value.concat("em"); //change font size to slider value in em unit
-     }
+   textContainer.style.fontSize = value.concat("em"); //change font size to slider value in em unit
    localStorage.setItem('font-size',value)
  }
 
@@ -293,11 +348,9 @@ document.addEventListener("click", function(event){
    console.log(fontProps[1].includes("i"));
    var fontStyle = (fontProps[1].includes("i") ? "italic" : "normal");
    var fontWeight = parseInt(fontProps[1],10) || '400';
-   for (block of text){
-      block.style.fontStyle = fontStyle;
-      block.style.fontWeight = fontWeight;
-      block.style.fontFamily = fontFamily; 
-   }
+   textContainer.style.fontStyle = fontStyle;
+   textContainer.style.fontWeight = fontWeight;
+   textContainer.style.fontFamily = fontFamily; 
    pageList.style.fontStyle = fontStyle;
    pageList.style.fontWeight = fontWeight;
    pageList.style.fontFamily = fontFamily; 
@@ -305,9 +358,7 @@ document.addEventListener("click", function(event){
  //---------------Font Color---------------
 function setFontColor(color) {
    fontColorPicker.value = color;
-    for (block of text){
-       block.style.color = color; //change font color to hex value from picker
-    }
+   textContainer.style.color = color; //change font color to hex value from picker
     localStorage.setItem("font-hex", color);
 
 }
@@ -324,20 +375,17 @@ function setBackgroundColor(color) {
 }
 
 function setAnimationSpeed(value){
+   animationSpeed = value * 1000;
    animationSpeedText.value = value;
    animationSpeedSlider.value = value;
-   for (block of text){
-     block.style.transitionDuration = value.concat("s");
-   }
    localStorage.setItem('animation-speed', value)
 }
  //---------------Animation Type---------------
 function setAnimationType(value){
+   animationTypeText = value;
    animationType.value = value;
-   for (block of text){
-      block.style.transitionTimingFunction = value;
-    }
-    localStorage.setItem('animation-type', value)
+   textContainer.style.transitionTimingFunction = value;
+   localStorage.setItem('animation-type', value)
 }
 
 //---------------Page list open/close---------------
