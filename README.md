@@ -10,7 +10,7 @@ Both clipboard content and customization settings are saved locally in browser's
     - Font size and color 
     - Background color
     - Animation type and speed
-    - Keyboard navigation
+- Keyboard navigation
 ### Planned updates:
 - Delete single clipboard history elements, clear history.
 - Set maximum total size or number of history elements

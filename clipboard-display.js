@@ -27,13 +27,23 @@ let animationTypeText = "linear";
 let clipData = [];
 let animationStack = [];
 let localStorage = window.localStorage;
-let currentPageIndex = {
+let currentPage = {
    indexInternal: -1,
+   objectInternal: {},
    set index(val) {
       this.indexInternal = val;
     },
     get index() {
       return this.indexInternal;
+    },
+    set object(val) {
+      this.objectInternal = val;
+    },
+    get object() {
+      return this.objectInternal;
+    },
+    updateIndex : function () {
+      this.index = clipData.findIndex(element => element.id === this.objectInternal.id);
     },
 };
 //--------------Loading screen----------------------
@@ -152,11 +162,11 @@ function handleNewNode(text){
 }
 
 function moveForward(){
-   moveToIndex(currentPageIndex.index + 1);
+   moveToIndex(currentPage.index + 1);
 }
 
 function moveBackwards(){
-   moveToIndex(currentPageIndex.index - 1);
+   moveToIndex(currentPage.index - 1);
 }
 
 function moveToRear(){
@@ -167,10 +177,10 @@ function moveToFront(){
    moveToIndex(clipData.length - 1);
 }
 function moveToIndex(newIndex){
-   var oldIndex = currentPageIndex.index;
-   console.log(clipData.length);
+   currentPage.object = clipData[newIndex];
+   var oldIndex = currentPage.index;
    if(!(oldIndex === newIndex) && newIndex < clipData.length && newIndex >= 0){ //avoid moving to same element or outside of bounds
-      currentPageIndex.index = newIndex;
+      currentPage.index = newIndex;
       updatePageCounter();  
       updateNavbarButtonsDisabled();
       var direction;
@@ -266,11 +276,11 @@ function createAndMoveTextElement(text,direction){
 
 function updatePageCounter(){
    var string = "";
-   pageCounter.textContent = string.concat(currentPageIndex.index + 1,"/",clipData.length);
+   pageCounter.textContent = string.concat(currentPage.index + 1,"/",clipData.length);
 }
 
 function updateNavbarButtonsDisabled(){
-   var index =  currentPageIndex.index; 
+   var index =  currentPage.index; 
    if(index !== 0 && index !== clipData.length - 1){
       doubleBackButton.disabled = false;
       backButton.disabled = false;
@@ -411,8 +421,15 @@ function togglePageList(){
       openPageList();
    }
 }
-
-//Keyboard functions
+//---------------Delete page---------------
+function deletePage(pageNumber){
+   if(pageNumber >= 0 && pageNumber < clipData.length){
+      clipData.splice(pageNumber, 1);
+      currentPage.updateIndex();
+      updatePageCounter();
+   }
+}
+//---------------Keyboard functions---------------
 $(document).keydown(function(e) {
    switch(e.which) {
       case 79: // o key
@@ -426,6 +443,9 @@ $(document).keydown(function(e) {
       break;
       case 39: // right arrow
          moveForward();
+      break;
+      case 46: // delete key
+         deletePage(0);
       break;
    }
 })
