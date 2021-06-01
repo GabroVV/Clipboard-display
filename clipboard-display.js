@@ -1,6 +1,5 @@
 //---------------Document element constants---------------
 const DirectionEnum = Object.freeze({"Left":0, "Right":1});
-
 const textContainer = document.getElementById("main");
 //Sidebar
 const fontSilder = document.getElementById("font-size-input");
@@ -168,8 +167,9 @@ function moveToFront(){
    moveToIndex(clipData.length - 1);
 }
 function moveToIndex(newIndex){
-   var oldIndex = currentPageIndex.index
-   if(!(oldIndex === newIndex)){ //avoid moving to same element
+   var oldIndex = currentPageIndex.index;
+   console.log(clipData.length);
+   if(!(oldIndex === newIndex) && newIndex < clipData.length && newIndex >= 0){ //avoid moving to same element or outside of bounds
       currentPageIndex.index = newIndex;
       updatePageCounter();  
       updateNavbarButtonsDisabled();
@@ -411,3 +411,21 @@ function togglePageList(){
       openPageList();
    }
 }
+
+//Keyboard functions
+$(document).keydown(function(e) {
+   switch(e.which) {
+      case 79: // o key
+         sidebarToggle();
+      break;
+      case 80: // p key
+         togglePageList();
+      break;
+      case 37: // left arrow
+          moveBackwards();
+      break;
+      case 39: // right arrow
+         moveForward();
+      break;
+   }
+})
