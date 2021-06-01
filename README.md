@@ -10,11 +10,11 @@ Both clipboard content and customization settings are saved locally in browser's
     - Font size and color 
     - Background color
     - Animation type and speed
-
+    - Keyboard navigation
 ### Planned updates:
 - Delete single clipboard history elements, clear history.
 - Set maximum total size or number of history elements
-- Keyboard navigation
+
 ***
 ## **Setup**
 1. Add "Clipboard Inserter" extension to your browser: 
@@ -23,3 +23,12 @@ Both clipboard content and customization settings are saved locally in browser's
 - Extension's options should be left as default: <details><summary>SHOW:</summary><p> ![image](img/inserter_options.png)</p></details>
 2. Go to the [website](https://gabrovv.github.io/Clipboard-display/) or [download](https://github.com/GabroVV/Clipboard-display/archive/refs/heads/main.zip) and unpack for local use
 3. Start the extension by clicking on it's icon ![image](img/icon_on.png)
+
+***
+## **Keyboard navigation**
+| Key | Function            |
+|-----|---------------------|
+|  o  | Open sidebar        |
+|  p  | Open page history   |
+|  ←  | Go to previous page |
+|  →  | Go to next page     |

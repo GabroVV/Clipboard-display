@@ -1,6 +1,5 @@
 //---------------Document element constants---------------
 const DirectionEnum = Object.freeze({"Left":0, "Right":1});
-
 const textContainer = document.getElementById("main");
 //Sidebar
 const fontSilder = document.getElementById("font-size-input");
@@ -413,9 +412,8 @@ function togglePageList(){
    }
 }
 
-
+//Keyboard functions
 $(document).keydown(function(e) {
-
    switch(e.which) {
       case 79: // o key
          sidebarToggle();
