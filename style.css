@@ -10,21 +10,33 @@ main{
   position: fixed;
   color: #eeeeee;
   width: 100vw;
-  height: 90vh;
+  height: calc(97vh - 80px);
   font-size: 3.2em;
   line-height: 1.1em;
+  margin-top: 3vh;
 }
 
+.outside-div{
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  position: absolute;
+  display: flex;
+  width: inherit;
+  height: inherit;
+  justify-content: center;
+  align-items: center;
+}
 .content {
     margin :auto 0;
-    padding: 5vw;
 }
 
 .new-page {
-  position: absolute;
-  top: 0px;
-  width: 100vw;
-  height: 90vh;
+  height: inherit;
+  overflow: auto;
+  display: flex;
+  margin:5vw;
 }
 
 .new-page .left{

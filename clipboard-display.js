@@ -103,8 +103,7 @@ if(clipDataRaw !== null){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
 }else{
-   updatePageCounter();
-   updateNavbarButtonsDisabled();
+   updateViewOnDataChange();
 }
 
 //---------------Manage page list elements---------------
@@ -181,8 +180,7 @@ function moveToIndex(newIndex){
    var oldIndex = currentPage.index;
    if(!(oldIndex === newIndex) && newIndex < clipData.length && newIndex >= 0){ //avoid moving to same element or outside of bounds
       currentPage.index = newIndex;
-      updatePageCounter();  
-      updateNavbarButtonsDisabled();
+      updateViewOnDataChange();
       var direction;
       if(oldIndex < newIndex){
          direction = DirectionEnum.Left;
@@ -203,9 +201,11 @@ function finishLeftoverAnimations(){
 
 //Create new text element on the side
 function createNewTextElement(text, direction){
+   var outsideDiv = document.createElement("div");
    var topDiv = document.createElement("div");
    var newText = document.createElement("div");
    newText.innerText = text;
+   outsideDiv.classList.add("outside-div");
    newText.classList.add("content");
    topDiv.classList.add("new-page");
    if(direction === DirectionEnum.Right){
@@ -213,8 +213,9 @@ function createNewTextElement(text, direction){
    }else{
       topDiv.classList.add("left");
    }
-   textContainer.appendChild(topDiv);
+   textContainer.appendChild(outsideDiv);
    topDiv.appendChild(newText);
+   outsideDiv.appendChild(topDiv)
    return topDiv;
 }
 
@@ -305,6 +306,10 @@ function updateNavbarButtonsDisabled(){
    }
 }
 
+function updateViewOnDataChange(){
+   updateNavbarButtonsDisabled();
+   updatePageCounter();
+}
 
 
 
@@ -354,8 +359,6 @@ document.addEventListener("click", function(event){
    localStorage.setItem("font", newFont);
    var fontProps = newFont.split(':');
    var fontFamily = fontProps[0];
-   console.log(fontProps[1]);
-   console.log(fontProps[1].includes("i"));
    var fontStyle = (fontProps[1].includes("i") ? "italic" : "normal");
    var fontWeight = parseInt(fontProps[1],10) || '400';
    textContainer.style.fontStyle = fontStyle;
@@ -423,10 +426,28 @@ function togglePageList(){
 }
 //---------------Delete page---------------
 function deletePage(pageNumber){
+   if(clipData.length <= 1){
+      clearPage();
+   }
+   else if(pageNumber === currentPage.index && pageNumber !== 0){
+      moveBackwards();
+   }
+   else if (pageNumber === currentPage.index && pageNumber === 0){
+      moveForward();
+   }
+
    if(pageNumber >= 0 && pageNumber < clipData.length){
       clipData.splice(pageNumber, 1);
       currentPage.updateIndex();
-      updatePageCounter();
+      updateViewOnDataChange();
+   }
+}
+
+function clearPage(){
+   var pages = document.getElementsByClassName("new-page");
+   for (const page of pages) {
+      page.innerText  = "";
+      console.log(page);
    }
 }
 //---------------Keyboard functions---------------
@@ -445,7 +466,7 @@ $(document).keydown(function(e) {
          moveForward();
       break;
       case 46: // delete key
-         deletePage(0);
+         deletePage(currentPage.index);
       break;
    }
 })
