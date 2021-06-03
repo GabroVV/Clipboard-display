@@ -99,12 +99,11 @@ loadLocalStorageConfig();
 
 //---------------Attempt to load previous data from local storage---------------
 var clipDataRaw = localStorage.getItem('clip-data');
-if(clipDataRaw !== null && clipData.length > 0){
+if(clipDataRaw !== null && clipDataRaw.length > 0){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
-}else{
-   updateViewOnDataChange();
 }
+updateViewOnDataChange();
 
 //---------------Clipboard addon handling---------------
    const observer = new MutationObserver(function DOMMutationHandler(mutationList, observer) {
