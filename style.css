@@ -30,6 +30,13 @@ main{
 }
 .content {
     margin :auto 0;
+    position: relative;
+}
+
+.delete-page-button {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .new-page {

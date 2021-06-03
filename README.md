@@ -32,3 +32,4 @@ Both clipboard content and customization settings are saved locally in browser's
 |  p  | Open page history   |
 |  ←  | Go to previous page |
 |  →  | Go to next page     |
+| del | Delete current page |

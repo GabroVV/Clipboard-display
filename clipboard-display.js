@@ -99,7 +99,7 @@ loadLocalStorageConfig();
 
 //---------------Attempt to load previous data from local storage---------------
 var clipDataRaw = localStorage.getItem('clip-data');
-if(clipDataRaw !== null){
+if(clipDataRaw !== null && clipData.length > 0){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
 }else{
@@ -438,6 +438,7 @@ function deletePage(pageNumber){
 
    if(pageNumber >= 0 && pageNumber < clipData.length){
       clipData.splice(pageNumber, 1);
+      localStorage.setItem("clip-data", JSON.stringify(clipData));
       currentPage.updateIndex();
       updateViewOnDataChange();
    }
