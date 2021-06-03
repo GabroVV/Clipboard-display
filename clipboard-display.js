@@ -27,13 +27,23 @@ let animationTypeText = "linear";
 let clipData = [];
 let animationStack = [];
 let localStorage = window.localStorage;
-let currentPageIndex = {
+let currentPage = {
    indexInternal: -1,
+   objectInternal: {},
    set index(val) {
       this.indexInternal = val;
     },
     get index() {
       return this.indexInternal;
+    },
+    set object(val) {
+      this.objectInternal = val;
+    },
+    get object() {
+      return this.objectInternal;
+    },
+    updateIndex : function () {
+      this.index = clipData.findIndex(element => element.id === this.objectInternal.id);
     },
 };
 //--------------Loading screen----------------------
@@ -89,12 +99,11 @@ loadLocalStorageConfig();
 
 //---------------Attempt to load previous data from local storage---------------
 var clipDataRaw = localStorage.getItem('clip-data');
-if(clipDataRaw !== null){
+if(clipDataRaw !== null && clipData.length > 0){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
 }else{
-   updatePageCounter();
-   updateNavbarButtonsDisabled();
+   updateViewOnDataChange();
 }
 
 //---------------Manage page list elements---------------
@@ -152,11 +161,11 @@ function handleNewNode(text){
 }
 
 function moveForward(){
-   moveToIndex(currentPageIndex.index + 1);
+   moveToIndex(currentPage.index + 1);
 }
 
 function moveBackwards(){
-   moveToIndex(currentPageIndex.index - 1);
+   moveToIndex(currentPage.index - 1);
 }
 
 function moveToRear(){
@@ -167,12 +176,11 @@ function moveToFront(){
    moveToIndex(clipData.length - 1);
 }
 function moveToIndex(newIndex){
-   var oldIndex = currentPageIndex.index;
-   console.log(clipData.length);
+   currentPage.object = clipData[newIndex];
+   var oldIndex = currentPage.index;
    if(!(oldIndex === newIndex) && newIndex < clipData.length && newIndex >= 0){ //avoid moving to same element or outside of bounds
-      currentPageIndex.index = newIndex;
-      updatePageCounter();  
-      updateNavbarButtonsDisabled();
+      currentPage.index = newIndex;
+      updateViewOnDataChange();
       var direction;
       if(oldIndex < newIndex){
          direction = DirectionEnum.Left;
@@ -193,9 +201,11 @@ function finishLeftoverAnimations(){
 
 //Create new text element on the side
 function createNewTextElement(text, direction){
+   var outsideDiv = document.createElement("div");
    var topDiv = document.createElement("div");
    var newText = document.createElement("div");
    newText.innerText = text;
+   outsideDiv.classList.add("outside-div");
    newText.classList.add("content");
    topDiv.classList.add("new-page");
    if(direction === DirectionEnum.Right){
@@ -203,15 +213,16 @@ function createNewTextElement(text, direction){
    }else{
       topDiv.classList.add("left");
    }
-   textContainer.appendChild(topDiv);
+   textContainer.appendChild(outsideDiv);
    topDiv.appendChild(newText);
-   return topDiv;
+   outsideDiv.appendChild(topDiv)
+   return outsideDiv;
 }
 
 function createAndMoveTextElement(text,direction){
    finishLeftoverAnimations();
    var topDiv = createNewTextElement(text,direction);
-   var pages = document.getElementsByClassName("new-page");
+   var pages = document.getElementsByClassName("outside-div");
    //Mark text element
    for (page of pages) {
       page.current = false;
@@ -241,7 +252,7 @@ function createAndMoveTextElement(text,direction){
    animationStack.push(animation);
    // Destroy other text elements on animation finish
    animation.onfinish = function() {
-      var pages = document.getElementsByClassName("new-page");
+      var pages = document.getElementsByClassName("outside-div");
       for (page of pages) {
          if(!page.current){
             page.remove();
@@ -266,11 +277,11 @@ function createAndMoveTextElement(text,direction){
 
 function updatePageCounter(){
    var string = "";
-   pageCounter.textContent = string.concat(currentPageIndex.index + 1,"/",clipData.length);
+   pageCounter.textContent = string.concat(currentPage.index + 1,"/",clipData.length);
 }
 
 function updateNavbarButtonsDisabled(){
-   var index =  currentPageIndex.index; 
+   var index =  currentPage.index; 
    if(index !== 0 && index !== clipData.length - 1){
       doubleBackButton.disabled = false;
       backButton.disabled = false;
@@ -295,6 +306,10 @@ function updateNavbarButtonsDisabled(){
    }
 }
 
+function updateViewOnDataChange(){
+   updateNavbarButtonsDisabled();
+   updatePageCounter();
+}
 
 
 
@@ -344,8 +359,6 @@ document.addEventListener("click", function(event){
    localStorage.setItem("font", newFont);
    var fontProps = newFont.split(':');
    var fontFamily = fontProps[0];
-   console.log(fontProps[1]);
-   console.log(fontProps[1].includes("i"));
    var fontStyle = (fontProps[1].includes("i") ? "italic" : "normal");
    var fontWeight = parseInt(fontProps[1],10) || '400';
    textContainer.style.fontStyle = fontStyle;
@@ -411,8 +424,34 @@ function togglePageList(){
       openPageList();
    }
 }
+//---------------Delete page---------------
+function deletePage(pageNumber){
+   if(clipData.length <= 1){
+      clearPage();
+   }
+   else if(pageNumber === currentPage.index && pageNumber !== 0){
+      moveBackwards();
+   }
+   else if (pageNumber === currentPage.index && pageNumber === 0){
+      moveForward();
+   }
 
-//Keyboard functions
+   if(pageNumber >= 0 && pageNumber < clipData.length){
+      clipData.splice(pageNumber, 1);
+      localStorage.setItem("clip-data", JSON.stringify(clipData));
+      currentPage.updateIndex();
+      updateViewOnDataChange();
+   }
+}
+
+function clearPage(){
+   var pages = document.getElementsByClassName("content");
+   for (const page of pages) {
+      page.innerText  = "";
+      console.log(page);
+   }
+}
+//---------------Keyboard functions---------------
 $(document).keydown(function(e) {
    switch(e.which) {
       case 79: // o key
@@ -426,6 +465,9 @@ $(document).keydown(function(e) {
       break;
       case 39: // right arrow
          moveForward();
+      break;
+      case 46: // delete key
+         deletePage(currentPage.index);
       break;
    }
 })
