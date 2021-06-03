@@ -216,13 +216,13 @@ function createNewTextElement(text, direction){
    textContainer.appendChild(outsideDiv);
    topDiv.appendChild(newText);
    outsideDiv.appendChild(topDiv)
-   return topDiv;
+   return outsideDiv;
 }
 
 function createAndMoveTextElement(text,direction){
    finishLeftoverAnimations();
    var topDiv = createNewTextElement(text,direction);
-   var pages = document.getElementsByClassName("new-page");
+   var pages = document.getElementsByClassName("outside-div");
    //Mark text element
    for (page of pages) {
       page.current = false;
@@ -252,7 +252,7 @@ function createAndMoveTextElement(text,direction){
    animationStack.push(animation);
    // Destroy other text elements on animation finish
    animation.onfinish = function() {
-      var pages = document.getElementsByClassName("new-page");
+      var pages = document.getElementsByClassName("outside-div");
       for (page of pages) {
          if(!page.current){
             page.remove();
@@ -444,7 +444,7 @@ function deletePage(pageNumber){
 }
 
 function clearPage(){
-   var pages = document.getElementsByClassName("new-page");
+   var pages = document.getElementsByClassName("content");
    for (const page of pages) {
       page.innerText  = "";
       console.log(page);
