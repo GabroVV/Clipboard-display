@@ -106,27 +106,6 @@ if(clipDataRaw !== null && clipData.length > 0){
    updateViewOnDataChange();
 }
 
-//---------------Manage page list elements---------------
-function generatePageList(){
-   for (const element of clipData) {
-      addNewListElement(element);
-   }
-}
-
-function addNewListElement(element){
-   var listElement = document.createElement("li");
-   listElement.jsId = element.id;
-   listElement.onclick = function() {pageListElementChosen(this.jsId)};
-   listElement.appendChild(document.createTextNode(element.text));
-   document.getElementById("page-list").prepend(listElement);
-}
-
-function pageListElementChosen(id){
-   var listElement = clipData.find(element => element.id == id);
-   moveToIndex(clipData.indexOf(listElement));
-   closePageList();
-}
-generatePageList();
 //---------------Clipboard addon handling---------------
    const observer = new MutationObserver(function DOMMutationHandler(mutationList, observer) {
       for(const mutation of mutationList){
@@ -155,7 +134,6 @@ function handleNewNode(text){
    }
    var clipElement = {id: id ,text: text}
    clipData.push(clipElement);
-   addNewListElement(clipElement);
    localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
    moveToFront();
 }
@@ -407,6 +385,7 @@ function openPageList(){
    pageListDiv.style.height = "90vh";
    pageListDiv.style.left = "15vw";
    pageListDiv.style.width = "70vw";
+   generatePageList();
 }
 
 function closePageList(){
@@ -414,6 +393,7 @@ function closePageList(){
    pageListDiv.style.height = "0";
    pageListDiv.style.left = "50vw";
    pageListDiv.style.width = "0";
+   clearPageList();
 }
 
 function togglePageList(){
@@ -423,6 +403,30 @@ function togglePageList(){
    else{
       openPageList();
    }
+}
+//---------------Manage page list elements---------------
+function generatePageList(){
+   for (const element of clipData) {
+      addNewListElement(element);
+   }
+}
+
+function addNewListElement(element){
+   var listElement = document.createElement("li");
+   listElement.jsId = element.id;
+   listElement.onclick = function() {pageListElementChosen(this.jsId)};
+   listElement.appendChild(document.createTextNode(element.text));
+   document.getElementById("page-list").prepend(listElement);
+}
+
+function clearPageList(){
+   pageList.innerHTML = '';
+}
+
+function pageListElementChosen(id){
+   var listElement = clipData.find(element => element.id == id);
+   moveToIndex(clipData.indexOf(listElement));
+   closePageList();
 }
 //---------------Delete page---------------
 function deletePage(pageNumber){
