@@ -18,8 +18,11 @@ const doubleForwardButton = document.getElementById("ff-button");
 //Page list
 const pageListDiv = document.getElementById("page-list-div");
 const pageList = document.getElementById("page-list");
+//Character count
+const charCount = document.getElementById("char-count-value");
 
 //Variables
+let characters = 0;
 let isPageListShown = false;
 let isSidebarShown = false;
 let animationSpeed = 1000;
@@ -134,6 +137,7 @@ function handleNewNode(text){
    var clipElement = {id: id ,text: text}
    clipData.push(clipElement);
    localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
+   addStringLengthToCharValue(text);
    moveToFront();
 }
 
@@ -440,7 +444,8 @@ function deletePage(pageNumber){
    }
 
    if(pageNumber >= 0 && pageNumber < clipData.length){
-      clipData.splice(pageNumber, 1);
+      let removed = clipData.splice(pageNumber, 1);
+      subtractStringLengthToCharValue(removed.pop().text);
       localStorage.setItem("clip-data", JSON.stringify(clipData));
       currentPage.updateIndex();
       updateViewOnDataChange();
@@ -474,3 +479,15 @@ $(document).keydown(function(e) {
       break;
    }
 })
+
+//---------------Character counter---------------
+
+function addStringLengthToCharValue(string){
+   characters += string.length;
+   charCount.innerHTML = characters;
+}
+
+function subtractStringLengthToCharValue(string){
+   characters -= string.length;
+   charCount.innerHTML = characters;
+}
