@@ -296,3 +296,15 @@ footer{
   font-weight: bold;
   font-size: 50px;
 }
+
+#char-count {
+  position: absolute;
+  padding:10px;
+  top:0;
+  left: 0;
+  margin-left: 5px;
+  margin-top: 5px;
+  font-family: Verdana;
+  font-size: 20px;
+  color: #eeeeee;
+}
