@@ -9,6 +9,7 @@ const bgColorPicker = document.getElementById("bg-color-picker")
 const animationSpeedSlider = document.getElementById("animation-speed-slider");
 const animationSpeedText = document.getElementById("animation-speed-text");
 const animationType = document.getElementById("animation-type");
+const whitespaceCheckbox = document.getElementById("whitespace-checkbox");
 //Navbar
 const backButton = document.getElementById("b-button");
 const doubleBackButton = document.getElementById("bb-button");
@@ -29,10 +30,11 @@ let animationSpeed = 1000;
 let animationTypeText = "linear";
 let clipData = [];
 let animationStack = [];
+let showWhitespace = true;
 let localStorage = window.localStorage;
 let currentPage = {
    indexInternal: -1,
-   objectInternal: {},
+   objectInternal: {text: ""},
    set index(val) {
       this.indexInternal = val;
     },
@@ -76,6 +78,7 @@ function loadLocalStorageConfig(){
    var font = localStorage.getItem('font');
    var animationSpeedSaved = localStorage.getItem('animation-speed');
    var animationTypeSaved = localStorage.getItem('animation-type');
+   var whitespace = localStorage.getItem('whitespace');
    if(fontSize !== null){
       setFontSize(fontSize);
    }
@@ -96,6 +99,10 @@ function loadLocalStorageConfig(){
    if(animationTypeSaved !== null){
       setAnimationType(animationTypeSaved);
    }
+   if(whitespace !== null){
+      showWhitespace = whitespace == 'true';
+   }
+   whitespaceCheckbox.checked = showWhitespace;
 }
 
 loadLocalStorageConfig();
@@ -169,7 +176,7 @@ function moveToIndex(newIndex){
       else{
          direction = DirectionEnum.Right;
       }
-      createAndMoveTextElement(clipData[newIndex].text, direction);
+      createAndMoveTextElement(currentPage.object.text, direction);
    }
 }
 
@@ -202,6 +209,9 @@ function createNewTextElement(text, direction){
 
 function createAndMoveTextElement(text,direction){
    finishLeftoverAnimations();
+   if(!showWhitespace){
+      text = text.replace(/\s/g, "");
+   }
    var topDiv = createNewTextElement(text,direction);
    var pages = document.getElementsByClassName("outside-div");
    //Mark text element
@@ -381,6 +391,21 @@ function setAnimationType(value){
    textContainer.style.transitionTimingFunction = value;
    localStorage.setItem('animation-type', value)
 }
+ //---------------Whitespace---------------
+ function updateShowWhitespace(){
+   showWhitespace = whitespaceCheckbox.checked;
+   var text = currentPage.object.text;
+   if(!showWhitespace){
+     text = text.replace(/\s/g, "");
+   }
+   var contents = document.getElementsByClassName("content");
+   for(const content of contents){
+      content.innerText = text;
+   }
+   localStorage.setItem('whitespace', showWhitespace);
+   
+}
+
 
 //---------------Page list open/close---------------
 function openPageList(){
