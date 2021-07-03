@@ -9,6 +9,7 @@ const bgColorPicker = document.getElementById("bg-color-picker")
 const animationSpeedSlider = document.getElementById("animation-speed-slider");
 const animationSpeedText = document.getElementById("animation-speed-text");
 const animationType = document.getElementById("animation-type");
+const whitespaceCheckbox = document.getElementById("whitespace-checkbox");
 //Navbar
 const backButton = document.getElementById("b-button");
 const doubleBackButton = document.getElementById("bb-button");
@@ -18,18 +19,39 @@ const doubleForwardButton = document.getElementById("ff-button");
 //Page list
 const pageListDiv = document.getElementById("page-list-div");
 const pageList = document.getElementById("page-list");
+//Character count
+const charCount = document.getElementById("char-count-value");
+const charCountDiv = document.getElementById("char-count-div")
+const totalCount = document.getElementById("total-count-value");
+const japanCount = document.getElementById("japanese-count-value");
+const kataCount = document.getElementById("katakana-count-value");
+const hiraCount = document.getElementById("hiragana-count-value");
+const kanjiCount = document.getElementById("kanji-count-value");
+const latinCount = document.getElementById("roman-count-value");
+const otherCount = document.getElementById("other-count-value");
 
 //Variables
+let characters = {
+   total : 0,
+   japanse : 0,
+   kanji : 0,
+   kata : 0,
+   hira : 0,
+   roman : 0,
+   other : 0
+}
 let isPageListShown = false;
+let isCharCountShown = false;
 let isSidebarShown = false;
 let animationSpeed = 1000;
 let animationTypeText = "linear";
 let clipData = [];
 let animationStack = [];
+let showWhitespace = true;
 let localStorage = window.localStorage;
 let currentPage = {
    indexInternal: -1,
-   objectInternal: {},
+   objectInternal: {text: ""},
    set index(val) {
       this.indexInternal = val;
     },
@@ -73,6 +95,7 @@ function loadLocalStorageConfig(){
    var font = localStorage.getItem('font');
    var animationSpeedSaved = localStorage.getItem('animation-speed');
    var animationTypeSaved = localStorage.getItem('animation-type');
+   var whitespace = localStorage.getItem('whitespace');
    if(fontSize !== null){
       setFontSize(fontSize);
    }
@@ -93,6 +116,10 @@ function loadLocalStorageConfig(){
    if(animationTypeSaved !== null){
       setAnimationType(animationTypeSaved);
    }
+   if(whitespace !== null){
+      showWhitespace = whitespace == 'true';
+   }
+   whitespaceCheckbox.checked = showWhitespace;
 }
 
 loadLocalStorageConfig();
@@ -134,6 +161,7 @@ function handleNewNode(text){
    var clipElement = {id: id ,text: text}
    clipData.push(clipElement);
    localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
+   adjustCharacterCount(text, 1);
    moveToFront();
 }
 
@@ -165,7 +193,7 @@ function moveToIndex(newIndex){
       else{
          direction = DirectionEnum.Right;
       }
-      createAndMoveTextElement(clipData[newIndex].text, direction);
+      createAndMoveTextElement(currentPage.object.text, direction);
    }
 }
 
@@ -198,6 +226,9 @@ function createNewTextElement(text, direction){
 
 function createAndMoveTextElement(text,direction){
    finishLeftoverAnimations();
+   if(!showWhitespace){
+      text = text.replace(/\s/g, "");
+   }
    var topDiv = createNewTextElement(text,direction);
    var pages = document.getElementsByClassName("outside-div");
    //Mark text element
@@ -304,19 +335,23 @@ function sidebarToggle() {
 function openSidebar() {
    document.getElementById("sidebar").style.opacity = "1";
    document.getElementById("sidebar").style.right = "0px";
-   document.getElementsByTagName("main")[0].style.marginRight = "300px";
 }
  
 function closeSidebar() {
    document.getElementById("sidebar").style.opacity = "0";
    document.getElementById("sidebar").style.right = "-300px";
-   document.getElementsByTagName("main")[0].style.marginRight = "0";
 } 
 
-//Close sidebar on outside click
+//Close sidebars on outside click
 document.addEventListener("click", function(event){
    if(isSidebarShown && !(event.target.closest("#sidebar, #sidebar-button, .font-picker, .jscolor-picker"))){
       sidebarToggle();
+   }
+   if(isCharCountShown && !(event.target.closest("#char-count-div, #char-count"))){
+      toggleCharacterCountList();
+   }
+   if(isPageListShown && !(event.target.closest("#page-list-div, #page-count-button"))){
+      togglePageList();
    }
 })
  //---------------Font Slider---------------
@@ -377,22 +412,61 @@ function setAnimationType(value){
    textContainer.style.transitionTimingFunction = value;
    localStorage.setItem('animation-type', value)
 }
+ //---------------Whitespace---------------
+ function updateShowWhitespace(){
+   showWhitespace = whitespaceCheckbox.checked;
+   var text = currentPage.object.text;
+   if(!showWhitespace){
+     text = text.replace(/\s/g, "");
+   }
+   var contents = document.getElementsByClassName("content");
+   for(const content of contents){
+      content.innerText = text;
+   }
+   localStorage.setItem('whitespace', showWhitespace);
+   
+}
+
 
 //---------------Page list open/close---------------
 function openPageList(){
+   closingPageList = false;
    isPageListShown = true;
    pageListDiv.style.height = "90vh";
    pageListDiv.style.left = "15vw";
    pageListDiv.style.width = "70vw";
+   pageList.animate([
+      {
+         opacity:0
+      },
+      {
+         opacity:1    }
+    ], {duration: 500, easing: "ease-in"});
    generatePageList();
 }
+
+let closingPageList = false;
 
 function closePageList(){
    isPageListShown = false;
    pageListDiv.style.height = "0";
    pageListDiv.style.left = "50vw";
    pageListDiv.style.width = "0";
-   clearPageList();
+   closingPageList = true;
+   var animation = pageList.animate([
+      {
+         opacity:1
+      },
+      {
+         opacity:0    }
+    ], {duration: 500, easing: "ease-in"});
+    animation.onfinish = function() {
+      if(closingPageList){
+         clearPageList();
+      }
+      closingPageList = false;
+      }
+   
 }
 
 function togglePageList(){
@@ -419,7 +493,7 @@ function addNewListElement(element){
 }
 
 function clearPageList(){
-   pageList.innerHTML = '';
+    pageList.innerHTML = '';
 }
 
 function pageListElementChosen(id){
@@ -440,7 +514,8 @@ function deletePage(pageNumber){
    }
 
    if(pageNumber >= 0 && pageNumber < clipData.length){
-      clipData.splice(pageNumber, 1);
+      let removed = clipData.splice(pageNumber, 1);
+      adjustCharacterCount(removed.pop().text, -1);
       localStorage.setItem("clip-data", JSON.stringify(clipData));
       currentPage.updateIndex();
       updateViewOnDataChange();
@@ -474,3 +549,67 @@ $(document).keydown(function(e) {
       break;
    }
 })
+
+//---------------Character counter---------------
+
+function openCharacterCountList(){
+   isCharCountShown = true;
+   charCountDiv.style.opacity = "1";
+   charCountDiv.style.left = "0";
+}
+
+function closeCharacterCountList(){
+   isCharCountShown = false;
+   charCountDiv.style.opacity = "0";
+   charCountDiv.style.left = "-300px";
+}
+
+function toggleCharacterCountList(){
+   if(isCharCountShown){
+      closeCharacterCountList();
+   }
+   else{
+      openCharacterCountList();
+   }
+}
+function adjustCharacterCount(string,multiplier){
+   (characters.total += string.length * multiplier) < 0 ? 0 : characters.total;
+   for(let char of string){
+      if(char >= "\u3040" && char <= "\u309f"){
+         (characters.hira += 1 * multiplier) < 0 ? 0 : characters.hira;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+      }else if (char >= "\u30a0" && char <= "\u30ff" || char>='ｦ' && char <= 'ﾝ'){
+         (characters.kata += 1 * multiplier) < 0 ? 0 : characters.kata;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+      }else if (char >= "\u4e00" && char <= "\u9faf"){
+         (characters.kanji += 1 * multiplier) < 0 ? 0 : characters.kanji;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+      }else if (char >= "\u3400" && char <= "\u4dbf"){
+         (characters.kanji += 1 * multiplier) < 0 ? 0 : characters.kanji;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+      }else if (char >= "\u30a0" && char <= "\u30ff"){
+         (characters.kata += 1 * multiplier) < 0 ? 0 : characters.kata;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+      }else if(char>='0' && char<='9' || char>='A' && char <= 'z' ||char>='Ａ' && char <= 'Ｚ' || char>='ａ' && char <= 'ｚ'){
+         (characters.roman += 1 * multiplier) < 0 ? 0 : characters.roman;
+      }else{
+         (characters.other += 1 * multiplier) < 0 ? 0 : characters.other;
+      }
+   }
+      updateCharacterCountDisplay()
+}
+
+function subtractStringCharactersLength(string){
+   characters.total -= string.length;
+}
+
+function updateCharacterCountDisplay(){
+   charCount.innerHTML = characters.total;
+   totalCount.innerHTML = characters.total;
+   japanCount.innerHTML = characters.japanse;
+   kataCount.innerHTML = characters.kata;
+   hiraCount.innerHTML = characters.hira;
+   latinCount.innerHTML = characters.roman;
+   kanjiCount.innerHTML = characters.kanji;
+   otherCount.innerHTML = characters.other;
+}

@@ -6,45 +6,67 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
 <body>
+  <button id ="char-count" class="my-button" onclick="toggleCharacterCountList()">Character count:
+    <span id ="char-count-value">0</span>
+  </button>
+  <div id="char-count-div">
+    <button id="close-count-list" class="bi bi-x-lg my-button"  onclick="toggleCharacterCountList()"></button>
+    <span class="option-block">Total:<span class = "count-value" id ="total-count-value">0</span></span>
+    <span class="option-block">Japanese:<span class = "count-value" id ="japanese-count-value">0</span></span>
+    <span class="option-block">Katakana:<span class = "count-value" id ="katakana-count-value">0</span></span>
+    <span class="option-block">Hiragana:<span class = "count-value" id ="hiragana-count-value">0</span></span>
+    <span class="option-block">Kanji:<span class = "count-value" id ="kanji-count-value">0</span></span>
+    <span class="option-block">Latin:<span class = "count-value" id ="roman-count-value">0</span></span>
+    <span class="option-block">Other:<span class = "count-value" id ="other-count-value">0</span></span>
+  </div>
   <button id="sidebar-button" class="bi bi-gear-fill my-button"  onclick="sidebarToggle()"></button>
   <div id="sidebar">
     <div class="block-header">OPTIONS</div>
     <div class="option-block">
-      <div class="option-name">Background color:</div>
+      <label for= "bg-color-picker" class="option-name">Background color:</label>
       <input onInput="setBackgroundColor(this.jscolor.toHEXString())" value="#1a202b" data-jscolor="" id="bg-color-picker" class="color-picker">
     </div>
     <div class="option-block">
-      <div class="option-name">Font Color:</div>
+      <label for="font-color-picker" class="option-name">Font Color:</label>
       <input onInput="setFontColor(this.jscolor.toHEXString())" value="#eeeeee" data-jscolor="" id="font-color-picker" class="color-picker">
     </div>
     <div class="option-block">
-      <div class="option-name">Font size (em):
+      <label for="font-size-text-input" class="option-name">Font size (em):
         <input type="number" id="font-size-text-input" step="0.1" value="3.2" oninput="setFontSize(this.value)" size=4>
-      </div>
+      </label>
       <input type="range" step="0.1" min="0.5" max="20" value="3.2" class="slider" id="font-size-input">
     </div>
     <div class="option-block">
-      <div class="option-name">Font picker:</div>
+      <label for="font" class="option-name">Font picker:</label>
       <input id="font" class="fonts" onchange="fontChange(this.value)">
     </div>
     <div class="option-block">
-      <div class="option-name">Animation speed (s):</div>
+      <label class="option-name" for="whitespace-checkbox">Show whitespace:</label>
+      <input type="checkbox" id="whitespace-checkbox" oninput="updateShowWhitespace()">
+    </div>
+    <div class="option-block">
+      <label for="animation-speed-text" class="option-name">Animation speed (s):</label>
       <input type="number" id="animation-speed-text" step="0.1" value="1" oninput="setAnimationSpeed(this.value)" size=4>
       <input type="range" step="0.1" min="0" max="4" value="1" class="slider" id="animation-speed-slider">
     </div>
     <div class="option-block">
-      <div class="option-name">Animation type:</div>
+      <label for="animation-type" class="option-name">Animation type:</label>
       <select id="animation-type" oninput="setAnimationType(this.value)">
         <option value="ease-out">Ease out</option>
         <option value="linear">Linear</option>
         <option value="cubic-bezier(.2,.35,.41,1.44)">Bouncy</option>
       </select>
-
     </div>
   </div>
 
   <main id="main">
     <div class="new-page"></div>
+    <div class="outside-div">
+      <div class="new-page left">
+        <div class="content">
+        </div>
+      </div>
+    </div>
   </main>
     <div id="page-list-div">
       <div class="block-header">

@@ -151,7 +151,9 @@ footer{
 
 #page-list{
   color: #eeeeee;
+  transition: 1s;
   list-style-type: decimal;
+  animation-timing-function: ease-in;
   list-style-position: inside;
   overflow: hidden;
   text-overflow: ellipsis; 
@@ -295,4 +297,47 @@ footer{
   font-family: Verdana, sans-serif;
   font-weight: bold;
   font-size: 50px;
+}
+
+#char-count {
+  position: absolute;
+  padding:10px;
+  top:0;
+  left: 0;
+  margin-left: 5px;
+  margin-top: 5px;
+  font-family: Verdana;
+  font-size: 20px;
+}
+
+#char-count-div {
+  font-family: Verdana, sans-serif;
+  font-size: 25px;
+  opacity: 0;
+  color: #eeeeee;
+  height: 100%;
+  width: 300px;
+  background-color: black;
+  position: absolute;
+  z-index: 1;
+  top:0;
+  left: -300px;
+  overflow-x: hidden;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  
+}
+
+#char-count-div .option-block {
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  width: 260px;
+}
+
+#close-count-list {
+  align-self: flex-end;
+  padding: 10px;
 }
