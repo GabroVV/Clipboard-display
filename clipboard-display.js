@@ -22,6 +22,13 @@ const pageList = document.getElementById("page-list");
 //Character count
 const charCount = document.getElementById("char-count-value");
 const charCountDiv = document.getElementById("char-count-div")
+const totalCount = document.getElementById("total-count-value");
+const japanCount = document.getElementById("japanese-count-value");
+const kataCount = document.getElementById("katakana-count-value");
+const hiraCount = document.getElementById("hiragana-count-value");
+const kanjiCount = document.getElementById("kanji-count-value");
+const latinCount = document.getElementById("roman-count-value");
+const otherCount = document.getElementById("other-count-value");
 
 //Variables
 let characters = {
@@ -154,7 +161,7 @@ function handleNewNode(text){
    var clipElement = {id: id ,text: text}
    clipData.push(clipElement);
    localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
-   addStringLengthToCharValue(text);
+   addStringCharactersLength(text);
    moveToFront();
 }
 
@@ -481,7 +488,7 @@ function deletePage(pageNumber){
 
    if(pageNumber >= 0 && pageNumber < clipData.length){
       let removed = clipData.splice(pageNumber, 1);
-      subtractStringLengthToCharValue(removed.pop().text);
+      subtractStringCharactersLength(removed.pop().text);
       localStorage.setItem("clip-data", JSON.stringify(clipData));
       currentPage.updateIndex();
       updateViewOnDataChange();
@@ -538,10 +545,43 @@ function toggleCharacterCountList(){
       openCharacterCountList();
    }
 }
-function addStringLengthToCharValue(string){
+function addStringCharactersLength(string){
    characters.total += string.length;
+   for(let char of string){
+      if(char >= "\u3040" && char <= "\u309f"){
+         characters.hira++;
+         characters.japanse++;
+      }else if (char >= "\u30a0" && char <= "\u30ff" || char>='ｦ' && char <= 'ﾝ'){
+         characters.kata++;
+         characters.japanse++;
+      }else if (char >= "\u4e00" && char <= "\u9faf"){
+         characters.kanji++;
+         characters.japanse++;
+      }else if (char >= "\u3400" && char <= "\u4dbf"){
+         characters.kanji++;
+         characters.japanse++;
+      }else if (char >= "\u30a0" && char <= "\u30ff"){
+         characters.kata++;
+         characters.japanse++;    
+      }else if(char>='0' && char<='9' || char>='A' && char <= 'z' ||char>='Ａ' && char <= 'Ｚ' || char>='ａ' && char <= 'ｚ'){
+         characters.roman++;
+      }else{
+         characters.other++;
+      }
+   }
+      updateCharacterCountDisplay()
 }
 
-function subtractStringLengthToCharValue(string){
+function subtractStringCharactersLength(string){
    characters.total -= string.length;
+}
+
+function updateCharacterCountDisplay(){
+   totalCount.innerHTML = characters.total;
+   japanCount.innerHTML = characters.japanse;
+   kataCount.innerHTML = characters.kata;
+   hiraCount.innerHTML = characters.hira;
+   latinCount.innerHTML = characters.roman;
+   kanjiCount.innerHTML = characters.kanji;
+   otherCount.innerHTML = characters.other;
 }
