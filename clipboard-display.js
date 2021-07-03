@@ -161,7 +161,7 @@ function handleNewNode(text){
    var clipElement = {id: id ,text: text}
    clipData.push(clipElement);
    localStorage.setItem("clip-data", JSON.stringify(clipData)); // Add new data to localStorage
-   addStringCharactersLength(text);
+   adjustCharacterCount(text, 1);
    moveToFront();
 }
 
@@ -350,6 +350,9 @@ document.addEventListener("click", function(event){
    if(isCharCountShown && !(event.target.closest("#char-count-div, #char-count"))){
       toggleCharacterCountList();
    }
+   if(isPageListShown && !(event.target.closest("#page-list-div, #page-count-button"))){
+      togglePageList();
+   }
 })
  //---------------Font Slider---------------
  fontSilder.oninput = function() {
@@ -488,7 +491,7 @@ function deletePage(pageNumber){
 
    if(pageNumber >= 0 && pageNumber < clipData.length){
       let removed = clipData.splice(pageNumber, 1);
-      subtractStringCharactersLength(removed.pop().text);
+      adjustCharacterCount(removed.pop().text, -1);
       localStorage.setItem("clip-data", JSON.stringify(clipData));
       currentPage.updateIndex();
       updateViewOnDataChange();
@@ -545,28 +548,28 @@ function toggleCharacterCountList(){
       openCharacterCountList();
    }
 }
-function addStringCharactersLength(string){
-   characters.total += string.length;
+function adjustCharacterCount(string,multiplier){
+   (characters.total += string.length * multiplier) < 0 ? 0 : characters.total;
    for(let char of string){
       if(char >= "\u3040" && char <= "\u309f"){
-         characters.hira++;
-         characters.japanse++;
+         (characters.hira += 1 * multiplier) < 0 ? 0 : characters.hira;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
       }else if (char >= "\u30a0" && char <= "\u30ff" || char>='ｦ' && char <= 'ﾝ'){
-         characters.kata++;
-         characters.japanse++;
+         (characters.kata += 1 * multiplier) < 0 ? 0 : characters.kata;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
       }else if (char >= "\u4e00" && char <= "\u9faf"){
-         characters.kanji++;
-         characters.japanse++;
+         (characters.kanji += 1 * multiplier) < 0 ? 0 : characters.kanji;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
       }else if (char >= "\u3400" && char <= "\u4dbf"){
-         characters.kanji++;
-         characters.japanse++;
+         (characters.kanji += 1 * multiplier) < 0 ? 0 : characters.kanji;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
       }else if (char >= "\u30a0" && char <= "\u30ff"){
-         characters.kata++;
-         characters.japanse++;    
+         (characters.kata += 1 * multiplier) < 0 ? 0 : characters.kata;
+         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
       }else if(char>='0' && char<='9' || char>='A' && char <= 'z' ||char>='Ａ' && char <= 'Ｚ' || char>='ａ' && char <= 'ｚ'){
-         characters.roman++;
+         (characters.roman += 1 * multiplier) < 0 ? 0 : characters.roman;
       }else{
-         characters.other++;
+         (characters.other += 1 * multiplier) < 0 ? 0 : characters.other;
       }
    }
       updateCharacterCountDisplay()
@@ -577,6 +580,7 @@ function subtractStringCharactersLength(string){
 }
 
 function updateCharacterCountDisplay(){
+   charCount.innerHTML = characters.total;
    totalCount.innerHTML = characters.total;
    japanCount.innerHTML = characters.japanse;
    kataCount.innerHTML = characters.kata;
