@@ -430,19 +430,43 @@ function setAnimationType(value){
 
 //---------------Page list open/close---------------
 function openPageList(){
+   closingPageList = false;
    isPageListShown = true;
    pageListDiv.style.height = "90vh";
    pageListDiv.style.left = "15vw";
    pageListDiv.style.width = "70vw";
+   pageList.animate([
+      {
+         opacity:0
+      },
+      {
+         opacity:1    }
+    ], {duration: 500, easing: "ease-in"});
    generatePageList();
 }
+
+let closingPageList = false;
 
 function closePageList(){
    isPageListShown = false;
    pageListDiv.style.height = "0";
    pageListDiv.style.left = "50vw";
    pageListDiv.style.width = "0";
-   clearPageList();
+   closingPageList = true;
+   var animation = pageList.animate([
+      {
+         opacity:1
+      },
+      {
+         opacity:0    }
+    ], {duration: 500, easing: "ease-in"});
+    animation.onfinish = function() {
+      if(closingPageList){
+         clearPageList();
+      }
+      closingPageList = false;
+      }
+   
 }
 
 function togglePageList(){
@@ -469,7 +493,7 @@ function addNewListElement(element){
 }
 
 function clearPageList(){
-   pageList.innerHTML = '';
+    pageList.innerHTML = '';
 }
 
 function pageListElementChosen(id){

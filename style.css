@@ -151,7 +151,9 @@ footer{
 
 #page-list{
   color: #eeeeee;
+  transition: 1s;
   list-style-type: decimal;
+  animation-timing-function: ease-in;
   list-style-position: inside;
   overflow: hidden;
   text-overflow: ellipsis; 
