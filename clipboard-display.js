@@ -21,10 +21,20 @@ const pageListDiv = document.getElementById("page-list-div");
 const pageList = document.getElementById("page-list");
 //Character count
 const charCount = document.getElementById("char-count-value");
+const charCountDiv = document.getElementById("char-count-div")
 
 //Variables
-let characters = 0;
+let characters = {
+   total : 0,
+   japanse : 0,
+   kanji : 0,
+   kata : 0,
+   hira : 0,
+   roman : 0,
+   other : 0
+}
 let isPageListShown = false;
+let isCharCountShown = false;
 let isSidebarShown = false;
 let animationSpeed = 1000;
 let animationTypeText = "linear";
@@ -318,19 +328,20 @@ function sidebarToggle() {
 function openSidebar() {
    document.getElementById("sidebar").style.opacity = "1";
    document.getElementById("sidebar").style.right = "0px";
-   document.getElementsByTagName("main")[0].style.marginRight = "300px";
 }
  
 function closeSidebar() {
    document.getElementById("sidebar").style.opacity = "0";
    document.getElementById("sidebar").style.right = "-300px";
-   document.getElementsByTagName("main")[0].style.marginRight = "0";
 } 
 
-//Close sidebar on outside click
+//Close sidebars on outside click
 document.addEventListener("click", function(event){
    if(isSidebarShown && !(event.target.closest("#sidebar, #sidebar-button, .font-picker, .jscolor-picker"))){
       sidebarToggle();
+   }
+   if(isCharCountShown && !(event.target.closest("#char-count-div, #char-count"))){
+      toggleCharacterCountList();
    }
 })
  //---------------Font Slider---------------
@@ -507,12 +518,30 @@ $(document).keydown(function(e) {
 
 //---------------Character counter---------------
 
+function openCharacterCountList(){
+   isCharCountShown = true;
+   charCountDiv.style.opacity = "1";
+   charCountDiv.style.left = "0";
+}
+
+function closeCharacterCountList(){
+   isCharCountShown = false;
+   charCountDiv.style.opacity = "0";
+   charCountDiv.style.left = "-300px";
+}
+
+function toggleCharacterCountList(){
+   if(isCharCountShown){
+      closeCharacterCountList();
+   }
+   else{
+      openCharacterCountList();
+   }
+}
 function addStringLengthToCharValue(string){
-   characters += string.length;
-   charCount.innerHTML = characters;
+   characters.total += string.length;
 }
 
 function subtractStringLengthToCharValue(string){
-   characters -= string.length;
-   charCount.innerHTML = characters;
+   characters.total -= string.length;
 }

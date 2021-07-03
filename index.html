@@ -6,9 +6,18 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
 <body>
-  <span id ="char-count" class="my-button">Character count:
+  <button id ="char-count" class="my-button" onclick="toggleCharacterCountList()">Character count:
     <span id ="char-count-value">0</span>
-  </span>
+  </button>
+  <div id="char-count-div">
+    <span class="option-block">Total:<span id ="total-count-value">0</span></span>
+    <span class="option-block">Japanese:<span id ="japanese-count-value">0</span></span>
+    <span class="option-block">Katakana:<span id ="katakana-count-value">0</span></span>
+    <span class="option-block">Hiragana:<span id ="hiragana-count-value">0</span></span>
+    <span class="option-block">Kanji:<span id ="kanji-count-value">0</span></span>
+    <span class="option-block">Latin:<span id ="roman-count-value">0</span></span>
+    <span class="option-block">Other:<span id ="other-count-value">0</span></span>
+  </div>
   <button id="sidebar-button" class="bi bi-gear-fill my-button"  onclick="sidebarToggle()"></button>
   <div id="sidebar">
     <div class="block-header">OPTIONS</div>
