@@ -301,6 +301,7 @@ footer{
 
 #char-count {
   position: absolute;
+  z-index: 1;
   padding:10px;
   top:0;
   left: 0;
@@ -319,7 +320,7 @@ footer{
   width: 300px;
   background-color: black;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top:0;
   left: -300px;
   overflow-x: hidden;
@@ -340,4 +341,11 @@ footer{
 #close-count-list {
   align-self: flex-end;
   padding: 10px;
+}
+
+#reset-char-button {
+  margin-top: 5vh;
+  width: 50%;
+  background-color: #1a1717;
+  align-self: center;
 }

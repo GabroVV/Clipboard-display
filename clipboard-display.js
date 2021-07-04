@@ -130,6 +130,12 @@ if(clipDataRaw !== null && clipDataRaw.length > 0){
    clipData = JSON.parse(clipDataRaw);
    moveToFront();
 }
+
+var charactersFromStorage = localStorage.getItem('char-count');
+if(charactersFromStorage !== null){
+   characters = JSON.parse(charactersFromStorage);
+   updateCharacterCountDisplay();
+}
 updateViewOnDataChange();
 
 //---------------Clipboard addon handling---------------
@@ -573,30 +579,31 @@ function toggleCharacterCountList(){
    }
 }
 function adjustCharacterCount(string,multiplier){
-   (characters.total += string.length * multiplier) < 0 ? 0 : characters.total;
+   (characters.total += string.length * multiplier) <  0 ? characters.total = 0 : true;
    for(let char of string){
       if(char >= "\u3040" && char <= "\u309f"){
-         (characters.hira += 1 * multiplier) < 0 ? 0 : characters.hira;
-         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+         (characters.hira += 1 * multiplier) < 0 ? characters.hira = 0 : true;
+         (characters.japanse += 1 * multiplier) < 0 ? characters.japanse = 0 : true;
       }else if (char >= "\u30a0" && char <= "\u30ff" || char>='ｦ' && char <= 'ﾝ'){
-         (characters.kata += 1 * multiplier) < 0 ? 0 : characters.kata;
-         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+         (characters.kata += 1 * multiplier) < 0 ? characters.kata = 0 :true ;
+         (characters.japanse += 1 * multiplier) < 0 ? characters.japanse = 0 : true;
       }else if (char >= "\u4e00" && char <= "\u9faf"){
-         (characters.kanji += 1 * multiplier) < 0 ? 0 : characters.kanji;
-         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+         (characters.kanji += 1 * multiplier) < 0 ? characters.kanji = 0 :true ;
+         (characters.japanse += 1 * multiplier) < 0 ? characters.japanse = 0 :true ;
       }else if (char >= "\u3400" && char <= "\u4dbf"){
-         (characters.kanji += 1 * multiplier) < 0 ? 0 : characters.kanji;
-         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+         (characters.kanji += 1 * multiplier) < 0 ? characters.kanji = 0 : true;
+         (characters.japanse += 1 * multiplier) < 0 ? characters.japanse = 0 : true;
       }else if (char >= "\u30a0" && char <= "\u30ff"){
-         (characters.kata += 1 * multiplier) < 0 ? 0 : characters.kata;
-         (characters.japanse += 1 * multiplier) < 0 ? 0 : characters.japanse;
+         (characters.kata += 1 * multiplier) < 0 ? characters.kata = 0 : true;
+         (characters.japanse += 1 * multiplier) < 0 ? characters.japanse = 0 :true ;
       }else if(char>='0' && char<='9' || char>='A' && char <= 'z' ||char>='Ａ' && char <= 'Ｚ' || char>='ａ' && char <= 'ｚ'){
-         (characters.roman += 1 * multiplier) < 0 ? 0 : characters.roman;
+         (characters.roman += 1 * multiplier) < 0 ? characters.roman = 0 : true;
       }else{
-         (characters.other += 1 * multiplier) < 0 ? 0 : characters.other;
+         (characters.other += 1 * multiplier) < 0 ? characters.other = 0 : true;
       }
    }
-      updateCharacterCountDisplay()
+      localStorage.setItem("char-count", JSON.stringify(characters));
+      updateCharacterCountDisplay();
 }
 
 function subtractStringCharactersLength(string){
@@ -612,4 +619,19 @@ function updateCharacterCountDisplay(){
    latinCount.innerHTML = characters.roman;
    kanjiCount.innerHTML = characters.kanji;
    otherCount.innerHTML = characters.other;
+}
+
+function resetCharacterCount() {
+   if(confirm("Reset character count")){
+    characters = {
+         total : 0,
+         japanse : 0,
+         kanji : 0,
+         kata : 0,
+         hira : 0,
+         roman : 0,
+         other : 0
+      }
+    updateCharacterCountDisplay();
+   }
 }
