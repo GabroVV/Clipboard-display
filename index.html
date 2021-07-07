@@ -20,6 +20,11 @@
     <span class="option-block">Other:<span class = "count-value" id ="other-count-value">0</span></span>
     <button id="reset-char-button" class="my-button" onclick="resetCharacterCount()">Reset</button>
   </div>
+  <div id="stopwatch">
+    <button id="time-start" class="bi bi-play-fill my-button" onclick="timerToggle()"></button>
+    <div id="time">00:00:00</div>
+    <button id="time-reset" class="bi bi-arrow-repeat my-button" onclick="timerRestart()"></button>
+  </div>
   <button id="sidebar-button" class="bi bi-gear-fill my-button"  onclick="sidebarToggle()"></button>
   <div id="sidebar">
     <div class="block-header">OPTIONS</div>

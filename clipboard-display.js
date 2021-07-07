@@ -29,7 +29,10 @@ const hiraCount = document.getElementById("hiragana-count-value");
 const kanjiCount = document.getElementById("kanji-count-value");
 const latinCount = document.getElementById("roman-count-value");
 const otherCount = document.getElementById("other-count-value");
-
+//Stopwatch
+const timer = document.getElementById("time");
+const timerStart = document.getElementById("timer-start");
+const timerReset = document.getElementById("timer-reset");
 //Variables
 let characters = {
    total : 0,
@@ -390,7 +393,8 @@ document.addEventListener("click", function(event){
 function setFontColor(color) {
    fontColorPicker.value = color;
    textContainer.style.color = color; //change font color to hex value from picker
-    localStorage.setItem("font-hex", color);
+   timer.style.color = color;
+   localStorage.setItem("font-hex", color);
 
 }
   //---------------Background Color---------------
@@ -635,3 +639,5 @@ function resetCharacterCount() {
     updateCharacterCountDisplay();
    }
 }
+
+//Stopwatch
