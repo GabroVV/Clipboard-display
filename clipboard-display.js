@@ -669,3 +669,12 @@ function iterateTimer() {
     }
     stopwatchRunning = !stopwatchRunning
  }
+
+ function resetTimer(){
+    time = -1;
+    iterateTimer();
+    if(stopwatchRunning){
+       toggleTimer();
+       toggleTimer();
+    }
+ }
