@@ -81,6 +81,7 @@ main{
   text-align: center;
   text-decoration: none;
   border-radius: 4px;
+  z-index: 5;
 }
 
 
@@ -301,11 +302,10 @@ footer{
 
 #char-count {
   position: absolute;
+  z-index: 1;
   padding:10px;
-  top:0;
-  left: 0;
-  margin-left: 5px;
-  margin-top: 5px;
+  top:5px;
+  left: 5px;
   font-family: Verdana;
   font-size: 20px;
 }
@@ -319,7 +319,7 @@ footer{
   width: 300px;
   background-color: black;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top:0;
   left: -300px;
   overflow-x: hidden;
@@ -340,4 +340,32 @@ footer{
 #close-count-list {
   align-self: flex-end;
   padding: 10px;
+}
+
+#reset-char-button {
+  margin-top: 5vh;
+  width: 50%;
+  background-color: #1a1717;
+  align-self: center;
+}
+
+#stopwatch {
+  display: flex;
+  position: absolute;
+  top:5px;
+  left: 0;
+  right: 0;
+  font-size: 35px;
+  flex-direction: row;
+  align-items: center;
+  max-width: 250px;
+  margin: 0 auto;
+}
+ 
+#time {
+  width: 80%;
+  
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
 }
