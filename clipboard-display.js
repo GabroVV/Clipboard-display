@@ -71,6 +71,7 @@ let currentPage = {
       this.index = clipData.findIndex(element => element.id === this.objectInternal.id);
     },
 };
+let time = 0;
 //--------------Loading screen----------------------
 document.onreadystatechange = function () {
    if (document.readyState === 'complete') {
@@ -99,6 +100,7 @@ function loadLocalStorageConfig(){
    var animationSpeedSaved = localStorage.getItem('animation-speed');
    var animationTypeSaved = localStorage.getItem('animation-type');
    var whitespace = localStorage.getItem('whitespace');
+   var timeLocal = localStorage.getItem('time');
    if(fontSize !== null){
       setFontSize(fontSize);
    }
@@ -123,6 +125,10 @@ function loadLocalStorageConfig(){
       showWhitespace = whitespace == 'true';
    }
    whitespaceCheckbox.checked = showWhitespace;
+   if(timeLocal !== null){
+      time = timeLocal;
+      updateTimerView();
+   }
 }
 
 loadLocalStorageConfig();
@@ -642,10 +648,14 @@ function resetCharacterCount() {
 
 //Stopwatch
 let stopwatchRunning = false;
-let time = 0;
 let interval = null;
 function iterateTimer() {
    time++;
+   updateTimerView();
+   localStorage.setItem("time", time);
+ }
+
+ function updateTimerView(){
    var seconds = time;
    var hours = Math.floor(seconds / 3600);
    seconds -= hours * 3600;
@@ -671,8 +681,8 @@ function iterateTimer() {
  }
 
  function resetTimer(){
-    time = -1;
-    iterateTimer();
+    time = 0;
+    updateTimerView();
     if(stopwatchRunning){
        toggleTimer();
        toggleTimer();
