@@ -24,4 +24,8 @@ function deletePage(pageNumber){
        page.innerText  = "";
        console.log(page);
     }
- }
+    var deleteButtons = document.getElementsByClassName("delete-page-button");
+    for (const buttons of deleteButtons){
+       buttons.remove();
+    }
+   }

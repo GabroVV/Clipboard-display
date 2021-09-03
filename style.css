@@ -34,11 +34,14 @@ main{
 }
 
 .delete-page-button {
-  position: absolute;
-  top: 0;
-  right: 0;
+  margin:auto 0 auto 10px;
+  font-size: 0.5em;
 }
 
+.delete-page-button:hover {
+  cursor: pointer;
+  filter: brightness(0.6);
+}
 .new-page {
   height: inherit;
   overflow: auto;
@@ -369,3 +372,4 @@ footer{
   text-align: center;
   color: #fff;
 }
+
