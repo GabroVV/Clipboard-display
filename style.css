@@ -33,15 +33,6 @@ main{
     position: relative;
 }
 
-.delete-page-button {
-  margin:auto 0 auto 10px;
-  font-size: 0.5em;
-}
-
-.delete-page-button:hover {
-  cursor: pointer;
-  filter: brightness(0.6);
-}
 .new-page {
   height: inherit;
   overflow: auto;
@@ -123,14 +114,26 @@ footer{
   position: fixed;
   height: 80px;
   bottom: 0;
-  left: 25vw;
-  width: 50vw;
+  left: 0;
+  width: 100vw;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 }
 
+#nav-bar #delete-page-button{
+  margin-right: auto;
+}
+
+#filler-div{
+  margin-left: auto;
+  width: 55px;
+}
+#page-control{
+  display: flex;
+  justify-content: center;
+}
 
 #sidebar-button {
     z-index: 2;
@@ -367,7 +370,6 @@ footer{
  
 #time {
   width: 80%;
-  
   font-weight: bold;
   text-align: center;
   color: #fff;

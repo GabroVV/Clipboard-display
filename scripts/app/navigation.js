@@ -72,12 +72,6 @@ function moveForward(){
     var outsideDiv = document.createElement("div");
     var topDiv = document.createElement("div");
     var newText = document.createElement("span");
-    var deleteButton = document.createElement("i");
-    deleteButton.pageIndex = index;
-    deleteButton.onclick = function deleteCurrentPage() {
-     deletePage(this.pageIndex);
-    }
-    deleteButton.classList.add("delete-page-button","bi", "bi-x-lg");
     newText.innerText = text;
     outsideDiv.classList.add("outside-div");
     newText.classList.add("content");
@@ -89,7 +83,6 @@ function moveForward(){
     }
     textContainer.appendChild(outsideDiv);
     topDiv.appendChild(newText);
-    topDiv.appendChild(deleteButton);
     outsideDiv.appendChild(topDiv);
     return outsideDiv;
  }

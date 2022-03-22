@@ -22,7 +22,7 @@ $(document).keydown(function(e) {
          moveForward();
       break;
       case 46: // delete key
-         deletePage(currentPage.index);
+         deleteCurrentPage();
       break;
    }
 })

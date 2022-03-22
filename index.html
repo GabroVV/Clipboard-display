@@ -84,11 +84,15 @@
       <ol id="page-list" reversed></ol>
     </div>
     <div id="nav-bar">
-      <button id="bb-button" class="bi bi-chevron-double-left my-button"  onclick="moveToRear()"></button>
-      <button id="b-button" class="bi bi-chevron-left my-button"  class="my-button"  onclick="moveBackwards()"></button>
-      <button id="page-count-button" class="my-button" id="page-text-input"  onclick="togglePageList()"></button>
-      <button id="f-button" class="bi bi-chevron-right my-button"  onclick="moveForward()"></button>
-      <button id="ff-button"class="bi bi-chevron-double-right my-button"  onclick="moveToFront()"></button>
+      <button id="delete-page-button" class="bi bi-trash2-fill my-button" onclick="deleteCurrentPage()"></button>
+      <div id="page-control">
+        <button id="bb-button" class="bi bi-chevron-double-left my-button"  onclick="moveToRear()"></button>
+        <button id="b-button" class="bi bi-chevron-left my-button"  class="my-button"  onclick="moveBackwards()"></button>
+        <button id="page-count-button" class="my-button" id="page-text-input"  onclick="togglePageList()"></button>
+        <button id="f-button" class="bi bi-chevron-right my-button"  onclick="moveForward()"></button>
+        <button id="ff-button"class="bi bi-chevron-double-right my-button"  onclick="moveToFront()"></button>
+      </div>
+      <div id="filler-div"></div>
     </div>
     <script src="scripts\libs\jquery.js"></script>
     <script src="scripts\main.js" type="text/javascript"></script> 

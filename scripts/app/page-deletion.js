@@ -29,3 +29,7 @@ function deletePage(pageNumber){
        buttons.remove();
     }
    }
+
+   function deleteCurrentPage(){
+      deletePage(currentPage.index);
+   }
