@@ -12,6 +12,7 @@ function require(script) {
 }
 let localStorage = window.localStorage;
 
+require("https://unpkg.com/sweetalert/dist/sweetalert.min.js")
 require("scripts/libs/jscolor.min.js");
 require("scripts/libs/jquery.fontpicker.min.js");
 require("scripts/app/sidebar.js");

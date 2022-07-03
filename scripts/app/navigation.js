@@ -56,7 +56,7 @@ function moveForward(){
        else{
           direction = DirectionEnum.Right;
        }
-       createAndMoveTextElement(currentPage.object.text, direction);
+       createAndMoveTextElement(currentPage.object.text, direction, currentPage.index);
     }
  }
  
@@ -68,10 +68,10 @@ function moveForward(){
  }
  
  //Create new text element on the side
- function createNewTextElement(text, direction){
+ function createNewTextElement(text, direction,index){
     var outsideDiv = document.createElement("div");
     var topDiv = document.createElement("div");
-    var newText = document.createElement("div");
+    var newText = document.createElement("span");
     newText.innerText = text;
     outsideDiv.classList.add("outside-div");
     newText.classList.add("content");
@@ -83,16 +83,16 @@ function moveForward(){
     }
     textContainer.appendChild(outsideDiv);
     topDiv.appendChild(newText);
-    outsideDiv.appendChild(topDiv)
+    outsideDiv.appendChild(topDiv);
     return outsideDiv;
  }
  
- function createAndMoveTextElement(text,direction){
+ function createAndMoveTextElement(text,direction,index){
     finishLeftoverAnimations();
     if(!showWhitespace){
        text = text.replace(/\s/g, "");
     }
-    var topDiv = createNewTextElement(text,direction);
+    var topDiv = createNewTextElement(text,direction,index);
     var pages = document.getElementsByClassName("outside-div");
     //Mark text element
     for (page of pages) {

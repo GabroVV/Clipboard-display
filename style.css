@@ -33,12 +33,6 @@ main{
     position: relative;
 }
 
-.delete-page-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
 .new-page {
   height: inherit;
   overflow: auto;
@@ -62,7 +56,7 @@ main{
   width: 300px;
   background-color: black;
   position: fixed;
-  z-index: 1;
+  z-index: 10;
   top:0;
   right: -300px;
   overflow-x: hidden;
@@ -81,7 +75,7 @@ main{
   text-align: center;
   text-decoration: none;
   border-radius: 4px;
-  z-index: 5;
+  z-index: 2;
 }
 
 
@@ -120,21 +114,31 @@ footer{
   position: fixed;
   height: 80px;
   bottom: 0;
-  left: 25vw;
-  width: 50vw;
+  left: 0;
+  width: 100vw;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
+#nav-bar #delete-page-button{
+  margin-right: auto;
+}
+
+#filler-div{
+  margin-left: auto;
+  width: 55px;
+}
+#page-control{
+  display: flex;
+  justify-content: center;
+}
 
 #sidebar-button {
-    z-index: 2;
-    top: 5px;
-    right: 5px;
-    position: fixed;
-    display: inline-block;
+    z-index: 20;
+    margin-right: 10px;
 }
 
 
@@ -148,6 +152,7 @@ footer{
   bottom: 60px;
   background-color: black;
   border-radius: 10px;
+  z-index: 100;
 }
 
 #page-list{
@@ -180,10 +185,14 @@ footer{
     cursor:pointer;
 }
 
+#page-list-header{
+  margin: 0 auto;
+}
+
 .block-header {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
   color: #eeeeee;
   margin-top: 5px;
   font-size: 40px;
@@ -191,8 +200,26 @@ footer{
   font-weight: bold;
 }
 
-#close-page-list-button{
+#close-page-list-button, #clear-history-button{
   padding-right: 10px;
+  padding-left: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#close-page-list-padding{
+  width: 243.233px;
+  display: flex;
+  justify-content: end;
+}
+#clear-history-label{
+  font-style: normal;
+}
+
+.bi-journal-x::before {
+
+  content: "\f445";
+  margin-right: 15px;
 }
 
 .block-header div{
@@ -277,7 +304,7 @@ footer{
 }
 
 #loading {
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity 1s ease-in-out;
   width: 100%;
   height: 100%;
   top: 0;
@@ -301,13 +328,19 @@ footer{
 }
 
 #char-count {
-  position: absolute;
-  z-index: 1;
-  padding:10px;
-  top:5px;
-  left: 5px;
+  z-index: 2;
   font-family: Verdana;
   font-size: 20px;
+  margin-left: 10px;
+  padding: 10px;
+  min-width: 200px;
+}
+
+#button-padding{
+  width: 200px;
+  display: flex;
+  justify-content: end;
+  flex-shrink: 5;
 }
 
 #char-count-div {
@@ -319,7 +352,7 @@ footer{
   width: 300px;
   background-color: black;
   position: absolute;
-  z-index: 2;
+  z-index: 10;
   top:0;
   left: -300px;
   overflow-x: hidden;
@@ -351,21 +384,28 @@ footer{
 
 #stopwatch {
   display: flex;
-  position: absolute;
-  top:5px;
-  left: 0;
-  right: 0;
   font-size: 35px;
   flex-direction: row;
   align-items: center;
   max-width: 250px;
   margin: 0 auto;
+  gap: 20px;
+
 }
  
 #time {
   width: 80%;
-  
   font-weight: bold;
   text-align: center;
   color: #fff;
+}
+
+#top-bar{
+  position: absolute;
+  height: 60px;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100vw;
+  align-items: center;
 }
