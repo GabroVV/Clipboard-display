@@ -11,10 +11,6 @@ Both clipboard content and customization settings are saved locally in browser's
     - Background color
     - Animation type and speed
 - Keyboard navigation
-### Planned updates:
-- Delete single clipboard history elements, clear history.
-- Set maximum total size or number of history elements
-
 ***
 ## **Setup**
 1. Add "Clipboard Inserter" extension to your browser: 

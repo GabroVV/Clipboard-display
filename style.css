@@ -152,6 +152,7 @@ footer{
   bottom: 60px;
   background-color: black;
   border-radius: 10px;
+  z-index: 100;
 }
 
 #page-list{
@@ -184,10 +185,14 @@ footer{
     cursor:pointer;
 }
 
+#page-list-header{
+  margin: 0 auto;
+}
+
 .block-header {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
   color: #eeeeee;
   margin-top: 5px;
   font-size: 40px;
@@ -195,8 +200,26 @@ footer{
   font-weight: bold;
 }
 
-#close-page-list-button{
+#close-page-list-button, #clear-history-button{
   padding-right: 10px;
+  padding-left: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#close-page-list-padding{
+  width: 243.233px;
+  display: flex;
+  justify-content: end;
+}
+#clear-history-label{
+  font-style: normal;
+}
+
+.bi-journal-x::before {
+
+  content: "\f445";
+  margin-right: 15px;
 }
 
 .block-header div{

@@ -91,18 +91,24 @@ document.addEventListener("click", function(event){
     otherCount.innerHTML = characters.other;
  }
  
- function resetCharacterCount() {
+ function resetCharacterCountWindow() {
     if(confirm("Reset character count")){
-     characters = {
-          total : 0,
-          japanse : 0,
-          kanji : 0,
-          kata : 0,
-          hira : 0,
-          roman : 0,
-          other : 0
-       }
-     updateCharacterCountDisplay();
-     localStorage.setItem("char-count", JSON.stringify(characters));
+     resetCharacterCount()
     }
+}
+
+function resetCharacterCount(){
+   {
+      characters = {
+           total : 0,
+           japanse : 0,
+           kanji : 0,
+           kata : 0,
+           hira : 0,
+           roman : 0,
+           other : 0
+        }
+      updateCharacterCountDisplay();
+      localStorage.setItem("char-count", JSON.stringify(characters));
+     }
 }
